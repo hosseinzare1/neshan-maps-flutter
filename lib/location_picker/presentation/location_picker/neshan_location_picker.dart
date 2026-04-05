@@ -83,6 +83,9 @@ class NeshanLocationPicker extends StatefulWidget {
   ///
   /// **Required:**
   /// - [mapKey] — Neshan API key for the map.
+  /// - [reverseGeocodingApiKey] — Neshan API key for reverse-geocoding (enables
+  ///   the address bar).
+  /// - [onLocationAccepted] — Called when the user confirms a location.
   ///
   /// **Map:**
   /// - [mapConfig] — Viewport & style settings ([NeshanMapConfig]).
@@ -90,10 +93,8 @@ class NeshanLocationPicker extends StatefulWidget {
   /// - [controller] — Optional [NeshanMapController] for programmatic control.
   ///
   /// **Features (enabled by supplying API keys):**
-  /// - [reverseGeocodingApiKey] — Enables the address display bar. Without
-  ///   this, no address is shown and the accept button is always enabled.
-  /// - [searchApiKey] — Enables the search button (also requires
-  ///   [reverseGeocodingApiKey]).
+  /// - [searchApiKey] — Enables the search button (requires
+  ///   [reverseGeocodingApiKey], which is always provided).
   ///
   /// **Timing:**
   /// - [locationPickerConfig] — Debounce durations for geocoding & search.
@@ -103,7 +104,6 @@ class NeshanLocationPicker extends StatefulWidget {
   ///   centre marker.
   ///
   /// **Callbacks:**
-  /// - [onLocationAccepted] — User pressed the accept button.
   /// - [onLocationChanged] — Map centre changed.
   /// - [onAddressChanged] — Geocoding returned a new address.
   /// - [onApiError] — A Neshan API call failed.
@@ -114,14 +114,14 @@ class NeshanLocationPicker extends StatefulWidget {
   const NeshanLocationPicker({
     super.key,
     required this.mapKey,
+    required this.reverseGeocodingApiKey,
+    required this.onLocationAccepted,
     this.mapConfig,
     this.markers = const [],
     this.controller,
-    this.reverseGeocodingApiKey,
     this.searchApiKey,
     this.locationPickerConfig,
     this.uiConfig,
-    this.onLocationAccepted,
     this.onLocationChanged,
     this.onAddressChanged,
     this.onApiError,
@@ -156,19 +156,16 @@ class NeshanLocationPicker extends StatefulWidget {
 
   /// API key for Neshan reverse-geocoding.
   ///
-  /// **Provided:** Enables the address bar at the top of the map. As the user
-  /// pans, the address at the centre pin is fetched and displayed.
-  ///
-  /// **Omitted:** No address bar is shown, and the accept button is enabled as
-  /// soon as the map reports its first centre coordinate.
+  /// Enables the address bar at the top of the map. As the user pans, the
+  /// address at the centre pin is fetched and displayed automatically.
   ///
   /// Obtain your key at https://platform.neshan.org/.
-  final String? reverseGeocodingApiKey;
+  final String reverseGeocodingApiKey;
 
   /// API key for Neshan search.
   ///
-  /// **Provided (together with [reverseGeocodingApiKey]):** Adds a search icon
-  /// to the address bar. Tapping it opens the search screen.
+  /// **Provided:** Adds a search icon to the address bar. Tapping it opens the
+  /// search screen where users can find a location by name.
   ///
   /// **Omitted:** No search functionality is available.
   ///
@@ -186,9 +183,9 @@ class NeshanLocationPicker extends StatefulWidget {
 
   /// Called when the user presses the accept button.
   ///
-  /// Receives the selected [LatLng] position and the formatted address string.
-  /// If [reverseGeocodingApiKey] is not set, the address will be an empty string.
-  final void Function(LatLng position, String address)? onLocationAccepted;
+  /// Receives the selected [LatLng] position and the formatted address string
+  /// from reverse-geocoding.
+  final void Function(LatLng position, String address) onLocationAccepted;
 
   /// Called whenever the map centre changes.
   ///
@@ -257,10 +254,9 @@ class _NeshanLocationPickerState extends State<NeshanLocationPicker> {
   // Logger
   late final NeshanMapLogger _logger;
 
-  // Computed properties for feature enablement
-  bool get _isGeocodingEnabled => widget.reverseGeocodingApiKey != null;
-  bool get _isSearchEnabled =>
-      widget.searchApiKey != null && _isGeocodingEnabled;
+  // Search is enabled only when a search API key is provided.
+  // Geocoding is always enabled (reverseGeocodingApiKey is required).
+  bool get _isSearchEnabled => widget.searchApiKey != null;
 
   @override
   void initState() {
@@ -398,40 +394,37 @@ class _NeshanLocationPickerState extends State<NeshanLocationPicker> {
               ),
 
             // Address display overlay (positioned above map)
-            // Only show if geocoding is enabled
-            if (_isGeocodingEnabled)
-              PickerAddressDisplay(
-                data: AddressDisplayData(
-                  formattedAddress: state.currentAddress,
-                  fullResponse: state.lastReverseGeocodingResponse,
-                  isLoading: state.isLoadingAddress,
-                  hasError: state.hasAddressError,
-                  openSearchScreen: _openSearchScreen,
-                  isSearchEnabled: _isSearchEnabled,
-                ),
-                customBuilder: widget.uiConfig?.addressDisplayBuilder,
+            PickerAddressDisplay(
+              data: AddressDisplayData(
+                formattedAddress: state.currentAddress,
+                fullResponse: state.lastReverseGeocodingResponse,
+                isLoading: state.isLoadingAddress,
+                hasError: state.hasAddressError,
+                openSearchScreen: _openSearchScreen,
+                isSearchEnabled: _isSearchEnabled,
               ),
+              customBuilder: widget.uiConfig?.addressDisplayBuilder,
+            ),
 
             // Accept button overlay (positioned above map)
-            if (widget.onLocationAccepted != null)
-              PickerAcceptButton(
-                data: AcceptButtonData(
-                  onPressed: state.isReadyToAccept
-                      ? () {
-                          widget.onLocationAccepted?.call(
-                            LatLng(state.currentLat!, state.currentLng!),
-                            state.currentAddress!,
-                          );
-                        }
-                      : null,
-                  isEnabled: state.isReadyToAccept,
-                  currentLocation: state.hasLocation
-                      ? LatLng(state.currentLat!, state.currentLng!)
-                      : null,
-                  currentAddress: state.currentAddress,
-                ),
-                customBuilder: widget.uiConfig?.acceptButtonBuilder,
+            PickerAcceptButton(
+              data: AcceptButtonData(
+                onPressed: state.isReadyToAccept
+                    ? () {
+                        widget.onLocationAccepted(
+                          LatLng(state.currentLat!, state.currentLng!),
+                          state.currentAddress!,
+                        );
+                      }
+                    : null,
+                isEnabled: state.isReadyToAccept,
+                currentLocation: state.hasLocation
+                    ? LatLng(state.currentLat!, state.currentLng!)
+                    : null,
+                currentAddress: state.currentAddress,
               ),
+              customBuilder: widget.uiConfig?.acceptButtonBuilder,
+            ),
           ],
         );
       },
