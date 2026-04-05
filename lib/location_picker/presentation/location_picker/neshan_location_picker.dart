@@ -272,7 +272,7 @@ class _NeshanLocationPickerState extends State<NeshanLocationPicker> {
 
     // Initialize location picker controller
     _locationPickerController = LocationPickerController(
-      reveseGeocodingApiKey: widget.reverseGeocodingApiKey,
+      reverseGeocodingApiKey: widget.reverseGeocodingApiKey,
       enableDebug: widget.enableDebug,
       debounceDelay: config.geocodingDebounce,
       onAddressChanged: widget.onAddressChanged,

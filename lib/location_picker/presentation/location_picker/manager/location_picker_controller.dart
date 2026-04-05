@@ -15,7 +15,7 @@ import 'location_picker_state.dart';
 /// Example usage:
 /// ```dart
 /// final controller = LocationPickerController(
-///   reveseGeocodingApiKey: 'your-api-key',
+///   reverseGeocodingApiKey: 'your-api-key',
 ///   enableDebug: true,
 ///   debounceDelay: Duration(milliseconds: 500),
 /// );
@@ -34,14 +34,14 @@ import 'location_picker_state.dart';
 class LocationPickerController {
   /// Creates a [LocationPickerController] instance.
   ///
-  /// [reveseGeocodingApiKey] - The Neshan API key for geocoding service. If null, geocoding is disabled.
+  /// [reverseGeocodingApiKey] - The Neshan API key for geocoding service. If null, geocoding is disabled.
   /// [enableDebug] - Whether to enable debug logging.
   /// [debounceDelay] - Delay before triggering geocoding after location change.
   /// [onAddressChanged] - Optional callback when address is fetched.
   /// [onApiError] - Optional callback for handling API errors.
   /// [onError] - Optional callback for handling unexpected errors.
   LocationPickerController({
-    String? reveseGeocodingApiKey,
+    String? reverseGeocodingApiKey,
     bool enableDebug = false,
     Duration debounceDelay = const Duration(milliseconds: 500),
     void Function(String address, ReverseGeocodingResponse response)?
@@ -57,9 +57,9 @@ class LocationPickerController {
           enabled: enableDebug,
           prefix: 'LocationPickerController',
         ) {
-    if (reveseGeocodingApiKey != null) {
+    if (reverseGeocodingApiKey != null) {
       _geocodingService = NeshanReverseGeocodingService(
-        apiKey: reveseGeocodingApiKey,
+        apiKey: reverseGeocodingApiKey,
         logger: _logger.withPrefix('Geocoding'),
       );
       _logger.log('Geocoding service initialized');
