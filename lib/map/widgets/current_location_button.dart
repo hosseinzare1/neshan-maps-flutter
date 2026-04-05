@@ -49,7 +49,7 @@ class CurrentLocationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 64,
+      bottom: 86,
       right: 16,
       child: PointerInterceptor(
         child: FloatingActionButton(

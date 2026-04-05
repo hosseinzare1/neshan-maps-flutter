@@ -29,7 +29,7 @@ class PickerAcceptButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 16,
+      bottom: 24,
       left: 16,
       right: 16,
       child: AnimatedOpacity(
