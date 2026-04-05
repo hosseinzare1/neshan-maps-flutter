@@ -4,6 +4,7 @@ A Flutter SDK for integrating [Neshan Maps](https://platform.neshan.org/) into y
 
 ## Features
 
+- **Cross-platform** — works on Android, iOS, Web, and all other Flutter-supported platforms
 - **Interactive Map** — pan, zoom, multiple map styles, traffic layer, and POI toggles
 - **Markers & Controller** — place markers declaratively or manage them at runtime via `NeshanMapController`
 - **Location Picker** — draggable centre-pin with automatic reverse-geocoding and built-in place search
@@ -30,15 +31,17 @@ A Flutter SDK for integrating [Neshan Maps](https://platform.neshan.org/) into y
 
 Register at **[platform.neshan.org](https://platform.neshan.org/)** and create the following keys:
 
-| Key | Used for |
-|---|---|
-| `mapKey` | Displaying the map — required for both widgets |
+
+| Key                      | Used for                                                             |
+| ------------------------ | -------------------------------------------------------------------- |
+| `mapKey`                 | Displaying the map — required for both widgets                       |
 | `reverseGeocodingApiKey` | Converting coordinates to an address string (`NeshanLocationPicker`) |
-| `searchApiKey` | Searching for places by name (`NeshanLocationPicker`) |
+| `searchApiKey`           | Searching for places by name (`NeshanLocationPicker`)                |
+
 
 ### Important notes
 
-**`mapKey` must be a Web key.**
+`**mapKey` must be a Web key.**
 This package renders the Neshan map using the Neshan Web SDK on all platforms (via a WebView on mobile and an `<iframe>` on web). When creating the key in the Neshan dashboard, select **Web** as the platform — an Android or iOS key will not work.
 
 **Do not restrict the allowed domain / IP.**
@@ -55,7 +58,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  neshan_maps_flutter: ^0.0.1
+  neshan_maps_flutter: ^1.0.0
 ```
 
 Then run:
@@ -71,17 +74,16 @@ flutter pub get
 > **This step is optional.** It is only required if you want to show the user's current location on the map via `showCurrentLocationButton: true` in `NeshanMapConfig` (the default).  
 > If you set `showCurrentLocationButton: false`, you can skip this section entirely.
 
-This package uses the [`geolocator`](https://pub.dev/packages/geolocator) plugin internally to access device location. Follow the **platform-specific permission instructions** in the [geolocator documentation](https://pub.dev/packages/geolocator#usage) to add the required entries to your `AndroidManifest.xml`, `Info.plist`, and any other platform files.
+This package uses the `[geolocator](https://pub.dev/packages/geolocator)` plugin internally to access device location. Follow the **platform-specific permission instructions** in the [geolocator documentation](https://pub.dev/packages/geolocator#usage) to add the required entries to your `AndroidManifest.xml`, `Info.plist`, and any other platform files.
 
 ---
 
 ## Screenshots
 
-<!-- Replace the paths below with your actual screenshot files once added -->
-
 | NeshanMap | NeshanLocationPicker | Location Search |
 |:---------:|:--------------------:|:---------------:|
-| ![Map](screenshots/map.png) | ![Picker](screenshots/picker.png) | ![Search](screenshots/search.png) |
+| ![Map](https://raw.githubusercontent.com/hosseinzare1/neshan-maps-flutter/main/screenshots/map.png) | ![Picker](https://raw.githubusercontent.com/hosseinzare1/neshan-maps-flutter/main/screenshots/picker.png) | ![Search](https://raw.githubusercontent.com/hosseinzare1/neshan-maps-flutter/main/screenshots/search.png) |
+
 
 ---
 
@@ -188,17 +190,19 @@ class _MapPageState extends State<MapPage> {
 
 ### NeshanMap Parameters
 
-| Parameter | Type | Required | Default | Description |
-|---|---|---|---|---|
-| `mapKey` | `String` | ✅ | — | Neshan API key. Obtain at [platform.neshan.org](https://platform.neshan.org/). |
-| `config` | `NeshanMapConfig?` | | zoom 12 | Viewport and style configuration. |
-| `markers` | `List<NeshanMarker>` | | `[]` | Initial markers placed when the map loads. |
-| `controller` | `NeshanMapController?` | | — | Programmatic control: pan, zoom, add/remove markers. |
-| `onLocationChanged` | `void Function(double lat, double lng)?` | | — | Fired when the map centre changes. |
-| `onMarkerTapped` | `void Function(String markerId)?` | | — | Fired when a marker is tapped; receives the marker ID. |
-| `onError` | `NeshanErrorCallback?` | | — | Fired on WebView / iframe / parsing errors. |
-| `onLocationError` | `NeshanErrorCallback?` | | — | Fired on location permission or service errors. |
-| `enableDebug` | `bool` | | `false` | Enables verbose console logging. |
+
+| Parameter           | Type                                     | Required | Default | Description                                                                    |
+| ------------------- | ---------------------------------------- | -------- | ------- | ------------------------------------------------------------------------------ |
+| `mapKey`            | `String`                                 | ✅        | —       | Neshan API key. Obtain at [platform.neshan.org](https://platform.neshan.org/). |
+| `config`            | `NeshanMapConfig?`                       |          | zoom 12 | Viewport and style configuration.                                              |
+| `markers`           | `List<NeshanMarker>`                     |          | `[]`    | Initial markers placed when the map loads.                                     |
+| `controller`        | `NeshanMapController?`                   |          | —       | Programmatic control: pan, zoom, add/remove markers.                           |
+| `onLocationChanged` | `void Function(double lat, double lng)?` |          | —       | Fired when the map centre changes.                                             |
+| `onMarkerTapped`    | `void Function(String markerId)?`        |          | —       | Fired when a marker is tapped; receives the marker ID.                         |
+| `onError`           | `NeshanErrorCallback?`                   |          | —       | Fired on WebView / iframe / parsing errors.                                    |
+| `onLocationError`   | `NeshanErrorCallback?`                   |          | —       | Fired on location permission or service errors.                                |
+| `enableDebug`       | `bool`                                   |          | `false` | Enables verbose console logging.                                               |
+
 
 ---
 
@@ -219,25 +223,29 @@ NeshanMapConfig(
 )
 ```
 
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `initialCenter` | `LatLng` | `LatLng(35.6892, 51.3890)` | Starting map centre coordinate. |
-| `initialZoom` | `double` | `12.0` | Starting zoom level. |
-| `mapType` | `NeshanMapType` | `neshanVector` | Map style (see below). |
-| `minZoom` | `double` | `2.0` | Minimum zoom the user can reach. |
-| `maxZoom` | `double` | `21.0` | Maximum zoom the user can reach. |
-| `showPoi` | `bool` | `true` | Whether to render points of interest. |
-| `showTraffic` | `bool` | `false` | Whether to render the traffic layer. |
-| `showCurrentLocationButton` | `bool` | `true` | Shows a FAB that centres the map on the user's GPS position. |
+
+| Parameter                   | Type            | Default                    | Description                                                  |
+| --------------------------- | --------------- | -------------------------- | ------------------------------------------------------------ |
+| `initialCenter`             | `LatLng`        | `LatLng(35.6892, 51.3890)` | Starting map centre coordinate.                              |
+| `initialZoom`               | `double`        | `12.0`                     | Starting zoom level.                                         |
+| `mapType`                   | `NeshanMapType` | `neshanVector`             | Map style (see below).                                       |
+| `minZoom`                   | `double`        | `2.0`                      | Minimum zoom the user can reach.                             |
+| `maxZoom`                   | `double`        | `21.0`                     | Maximum zoom the user can reach.                             |
+| `showPoi`                   | `bool`          | `true`                     | Whether to render points of interest.                        |
+| `showTraffic`               | `bool`          | `false`                    | Whether to render the traffic layer.                         |
+| `showCurrentLocationButton` | `bool`          | `true`                     | Shows a FAB that centres the map on the user's GPS position. |
+
 
 #### NeshanMapType
 
-| Value | Description |
-|---|---|
-| `NeshanMapType.neshanVector` | Default vector map |
+
+| Value                             | Description              |
+| --------------------------------- | ------------------------ |
+| `NeshanMapType.neshanVector`      | Default vector map       |
 | `NeshanMapType.neshanVectorNight` | Vector map in night mode |
-| `NeshanMapType.neshanRaster` | Raster (tile) map |
+| `NeshanMapType.neshanRaster`      | Raster (tile) map        |
 | `NeshanMapType.neshanRasterNight` | Raster map in night mode |
+
 
 ---
 
@@ -255,13 +263,15 @@ NeshanMarker(
 )
 ```
 
-| Parameter | Type | Required | Description |
-|---|---|---|---|
-| `id` | `String` | ✅ | Unique marker identifier (used to reference it in the controller). |
-| `position` | `LatLng` | ✅ | Geographic coordinates. |
-| `color` | `Color?` | | Marker colour. Any Flutter `Color` value. |
-| `title` | `String?` | | Text shown in a popup when the marker is tapped. |
-| `draggable` | `bool` | | Whether the user can drag the marker. Default `false`. |
+
+| Parameter   | Type      | Required | Description                                                        |
+| ----------- | --------- | -------- | ------------------------------------------------------------------ |
+| `id`        | `String`  | ✅        | Unique marker identifier (used to reference it in the controller). |
+| `position`  | `LatLng`  | ✅        | Geographic coordinates.                                            |
+| `color`     | `Color?`  |          | Marker colour. Any Flutter `Color` value.                          |
+| `title`     | `String?` |          | Text shown in a popup when the marker is tapped.                   |
+| `draggable` | `bool`    |          | Whether the user can drag the marker. Default `false`.             |
+
 
 ---
 
@@ -300,18 +310,20 @@ controller.clearMarkers();
 controller.dispose();
 ```
 
-| Method | Returns | Description |
-|---|---|---|
-| `moveToLocation(lat, lng, {zoom})` | `void` | Animates the camera to the given coordinates. |
-| `setZoom(zoom)` | `void` | Animates to the given zoom level. |
-| `fitBounds(north, south, east, west)` | `void` | Fits the viewport to a bounding box. |
-| `getCurrentLocation()` | `Future<LatLng?>` | Returns the current map centre. |
-| `getCurrentZoom()` | `Future<double?>` | Returns the current zoom level. |
-| `addMarker(marker)` | `void` | Adds a single marker at runtime. |
-| `removeMarker(markerId)` | `void` | Removes a marker by ID. |
-| `updateMarkers(markers)` | `void` | Replaces all markers with a new list. |
-| `clearMarkers()` | `void` | Removes all markers. |
-| `dispose()` | `void` | Releases resources. Call in your widget's `dispose()`. |
+
+| Method                                | Returns           | Description                                            |
+| ------------------------------------- | ----------------- | ------------------------------------------------------ |
+| `moveToLocation(lat, lng, {zoom})`    | `void`            | Animates the camera to the given coordinates.          |
+| `setZoom(zoom)`                       | `void`            | Animates to the given zoom level.                      |
+| `fitBounds(north, south, east, west)` | `void`            | Fits the viewport to a bounding box.                   |
+| `getCurrentLocation()`                | `Future<LatLng?>` | Returns the current map centre.                        |
+| `getCurrentZoom()`                    | `Future<double?>` | Returns the current zoom level.                        |
+| `addMarker(marker)`                   | `void`            | Adds a single marker at runtime.                       |
+| `removeMarker(markerId)`              | `void`            | Removes a marker by ID.                                |
+| `updateMarkers(markers)`              | `void`            | Replaces all markers with a new list.                  |
+| `clearMarkers()`                      | `void`            | Removes all markers.                                   |
+| `dispose()`                           | `void`            | Releases resources. Call in your widget's `dispose()`. |
+
 
 ---
 
@@ -319,6 +331,7 @@ controller.dispose();
 
 > The picker is ready to use out of the box — no extra configuration is needed beyond the API keys.  
 > For deeper understanding of the underlying APIs, refer to the official Neshan documentation:
+>
 > - Reverse Geocoding API: [platform.neshan.org/docs/api/search-category/reverse-geocoding](https://platform.neshan.org/docs/api/search-category/reverse-geocoding/)
 > - Search API: [platform.neshan.org/docs/api/search-category/search](https://platform.neshan.org/docs/api/search-category/search/)
 
@@ -372,22 +385,24 @@ class PickerPage extends StatelessWidget {
 
 ### NeshanLocationPicker Parameters
 
-| Parameter | Type | Required | Description |
-|---|---|---|---|
-| `mapKey` | `String` | ✅ | Neshan map API key. |
-| `reverseGeocodingApiKey` | `String` | ✅ | Neshan reverse-geocoding API key. Enables the address bar. |
-| `onLocationAccepted` | `void Function(LatLng, String)` | ✅ | Called when the user confirms the selection. Receives the `LatLng` position and formatted address string. |
-| `mapConfig` | `NeshanMapConfig?` | | Viewport and style of the underlying map. |
-| `markers` | `List<NeshanMarker>` | | Static markers shown alongside the centre-pin overlay. |
-| `controller` | `NeshanMapController?` | | External controller for programmatic map control. An internal one is created automatically if omitted. |
-| `searchApiKey` | `String?` | | Neshan search API key. **When provided**, a search icon appears in the address bar. Omitting it disables search. |
-| `locationPickerConfig` | `NeshanLocationPickerConfig?` | | Debounce durations for geocoding and search. |
-| `uiConfig` | `LocationPickerUiConfig?` | | Custom builders for the address bar, confirm button, and centre marker. |
-| `onLocationChanged` | `void Function(double lat, double lng)?` | | Fired when the map centre changes. |
-| `onAddressChanged` | `void Function(String, ReverseGeocodingResponse)?` | | Fired when reverse-geocoding returns a new address. |
-| `onApiError` | `void Function(NeshanApiError)?` | | Fired when a geocoding or search API request fails. |
-| `onError` | `NeshanErrorCallback?` | | Fired on general (non-API) errors. |
-| `enableDebug` | `bool` | | Verbose console logging. Default `false`. |
+
+| Parameter                | Type                                               | Required | Description                                                                                                      |
+| ------------------------ | -------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
+| `mapKey`                 | `String`                                           | ✅        | Neshan map API key.                                                                                              |
+| `reverseGeocodingApiKey` | `String`                                           | ✅        | Neshan reverse-geocoding API key. Enables the address bar.                                                       |
+| `onLocationAccepted`     | `void Function(LatLng, String)`                    | ✅        | Called when the user confirms the selection. Receives the `LatLng` position and formatted address string.        |
+| `mapConfig`              | `NeshanMapConfig?`                                 |          | Viewport and style of the underlying map.                                                                        |
+| `markers`                | `List<NeshanMarker>`                               |          | Static markers shown alongside the centre-pin overlay.                                                           |
+| `controller`             | `NeshanMapController?`                             |          | External controller for programmatic map control. An internal one is created automatically if omitted.           |
+| `searchApiKey`           | `String?`                                          |          | Neshan search API key. **When provided**, a search icon appears in the address bar. Omitting it disables search. |
+| `locationPickerConfig`   | `NeshanLocationPickerConfig?`                      |          | Debounce durations for geocoding and search.                                                                     |
+| `uiConfig`               | `LocationPickerUiConfig?`                          |          | Custom builders for the address bar, confirm button, and centre marker.                                          |
+| `onLocationChanged`      | `void Function(double lat, double lng)?`           |          | Fired when the map centre changes.                                                                               |
+| `onAddressChanged`       | `void Function(String, ReverseGeocodingResponse)?` |          | Fired when reverse-geocoding returns a new address.                                                              |
+| `onApiError`             | `void Function(NeshanApiError)?`                   |          | Fired when a geocoding or search API request fails.                                                              |
+| `onError`                | `NeshanErrorCallback?`                             |          | Fired on general (non-API) errors.                                                                               |
+| `enableDebug`            | `bool`                                             |          | Verbose console logging. Default `false`.                                                                        |
+
 
 ---
 
@@ -402,10 +417,12 @@ NeshanLocationPickerConfig(
 )
 ```
 
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `geocodingDebounce` | `Duration` | 300 ms | How long to wait after the map stops moving before calling the reverse-geocoding API. |
-| `searchDebounce` | `Duration` | 300 ms | How long to wait after the user stops typing before calling the search API. |
+
+| Parameter           | Type       | Default | Description                                                                           |
+| ------------------- | ---------- | ------- | ------------------------------------------------------------------------------------- |
+| `geocodingDebounce` | `Duration` | 300 ms  | How long to wait after the map stops moving before calling the reverse-geocoding API. |
+| `searchDebounce`    | `Duration` | 300 ms  | How long to wait after the user stops typing before calling the search API.           |
+
 
 ---
 
@@ -459,25 +476,29 @@ NeshanLocationPicker(
 
 Provided to `addressDisplayBuilder`:
 
-| Field | Type | Description |
-|---|---|---|
-| `formattedAddress` | `String?` | Human-readable address string from reverse-geocoding. |
-| `fullResponse` | `ReverseGeocodingResponse?` | Full API response with city, state, neighbourhood, traffic zone flags, etc. |
-| `isLoading` | `bool` | `true` while a geocoding request is in flight. |
-| `hasError` | `bool` | `true` if the last geocoding request failed. |
-| `isSearchEnabled` | `bool` | `true` when a `searchApiKey` has been supplied. |
-| `openSearchScreen` | `VoidCallback` | Call this to open the search screen (only effective when search is enabled). |
+
+| Field              | Type                        | Description                                                                  |
+| ------------------ | --------------------------- | ---------------------------------------------------------------------------- |
+| `formattedAddress` | `String?`                   | Human-readable address string from reverse-geocoding.                        |
+| `fullResponse`     | `ReverseGeocodingResponse?` | Full API response with city, state, neighbourhood, traffic zone flags, etc.  |
+| `isLoading`        | `bool`                      | `true` while a geocoding request is in flight.                               |
+| `hasError`         | `bool`                      | `true` if the last geocoding request failed.                                 |
+| `isSearchEnabled`  | `bool`                      | `true` when a `searchApiKey` has been supplied.                              |
+| `openSearchScreen` | `VoidCallback`              | Call this to open the search screen (only effective when search is enabled). |
+
 
 #### AcceptButtonData
 
 Provided to `acceptButtonBuilder`:
 
-| Field | Type | Description |
-|---|---|---|
-| `onPressed` | `VoidCallback?` | Call in your button's `onPressed`. `null` when the button should be disabled. |
-| `isEnabled` | `bool` | Whether the button should be active. |
-| `currentLocation` | `LatLng?` | The currently selected coordinates. |
-| `currentAddress` | `String?` | The currently resolved address string. |
+
+| Field             | Type            | Description                                                                   |
+| ----------------- | --------------- | ----------------------------------------------------------------------------- |
+| `onPressed`       | `VoidCallback?` | Call in your button's `onPressed`. `null` when the button should be disabled. |
+| `isEnabled`       | `bool`          | Whether the button should be active.                                          |
+| `currentLocation` | `LatLng?`       | The currently selected coordinates.                                           |
+| `currentAddress`  | `String?`       | The currently resolved address string.                                        |
+
 
 ---
 
