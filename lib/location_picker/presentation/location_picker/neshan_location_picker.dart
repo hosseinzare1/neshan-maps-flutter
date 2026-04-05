@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../map/neshan_map.dart';
 import '../../../map/controller/neshan_map_controller.dart';
 import '../../../map/config/neshan_map_config.dart';
+import '../../../map/models/neshan_marker.dart';
 import '../../../utils/neshan_map_logger.dart';
 import '../../../utils/neshan_common.dart';
 import '../../config/neshan_location_picker_config.dart';
@@ -80,38 +81,41 @@ import 'widgets/picker_center_marker.dart';
 class NeshanLocationPicker extends StatefulWidget {
   /// Creates a Neshan location picker widget.
   ///
-  /// **Required Parameters:**
-  /// - [mapKey] - The Neshan API key for displaying the map
+  /// **Required:**
+  /// - [mapKey] — Neshan API key for the map.
   ///
-  /// **Map Configuration:**
-  /// - [mapConfig] - Configuration for the base map (initial position, zoom, etc.)
-  /// - [controller] - Optional controller for programmatic map control
+  /// **Map:**
+  /// - [mapConfig] — Viewport & style settings ([NeshanMapConfig]).
+  /// - [markers] — Static markers to show on the map alongside the centre pin.
+  /// - [controller] — Optional [NeshanMapController] for programmatic control.
   ///
-  /// **Feature Enablement (via API Keys):**
-  /// - [reverseGeocodingApiKey] - Provide to enable address display. Without this,
-  ///   no address will be shown.
-  /// - [searchApiKey] - Provide to enable search functionality. Requires
-  ///   [reverseGeocodingApiKey] to also be set.
+  /// **Features (enabled by supplying API keys):**
+  /// - [reverseGeocodingApiKey] — Enables the address display bar. Without
+  ///   this, no address is shown and the accept button is always enabled.
+  /// - [searchApiKey] — Enables the search button (also requires
+  ///   [reverseGeocodingApiKey]).
   ///
-  /// **Timing Configuration:**
-  /// - [locationPickerConfig] - Optional timing configuration (debounce durations)
+  /// **Timing:**
+  /// - [locationPickerConfig] — Debounce durations for geocoding & search.
   ///
-  /// **UI Customization:**
-  /// - [uiConfig] - Optional UI customization (custom builders)
+  /// **UI:**
+  /// - [uiConfig] — Custom builders for address display, accept button, and
+  ///   centre marker.
   ///
   /// **Callbacks:**
-  /// - [onLocationAccepted] - Called when user accepts a location
-  /// - [onLocationChanged] - Called when map center changes
-  /// - [onAddressChanged] - Called when address is fetched (geocoding)
-  /// - [onApiError] - Called when any Neshan API error occurs
-  /// - [onError] - Called for general errors
+  /// - [onLocationAccepted] — User pressed the accept button.
+  /// - [onLocationChanged] — Map centre changed.
+  /// - [onAddressChanged] — Geocoding returned a new address.
+  /// - [onApiError] — A Neshan API call failed.
+  /// - [onError] — General error.
   ///
   /// **Debug:**
-  /// - [enableDebug] - Enable detailed logging
+  /// - [enableDebug] — Verbose console logging.
   const NeshanLocationPicker({
     super.key,
     required this.mapKey,
     this.mapConfig,
+    this.markers = const [],
     this.controller,
     this.reverseGeocodingApiKey,
     this.searchApiKey,
@@ -127,91 +131,92 @@ class NeshanLocationPicker extends StatefulWidget {
 
   /// The Neshan API key required to display the map.
   ///
-  /// Get your API key from: https://platform.neshan.org/
+  /// Obtain your key at https://platform.neshan.org/.
   final String mapKey;
 
-  /// Configuration for the base map.
+  /// Viewport and style configuration for the underlying map.
   ///
-  /// Includes settings like initial center position, zoom level, traffic layer, etc.
-  /// If not provided, uses default values (Tehran center, zoom 13).
+  /// Controls the initial centre, zoom, map type, traffic layer, etc.
+  /// If omitted, the map opens centred on Tehran at zoom 12.
   final NeshanMapConfig? mapConfig;
+
+  /// Static markers to display on the map alongside the centre-pin overlay.
+  ///
+  /// These markers are placed on the map when it first loads. To add or
+  /// remove markers at runtime, use [controller].
+  ///
+  /// Defaults to an empty list.
+  final List<NeshanMarker> markers;
 
   /// Optional controller for programmatic map control.
   ///
-  /// Allows you to programmatically:
-  /// - Move the map to a specific location
-  /// - Add/remove markers
-  /// - Control zoom level
-  ///
-  /// If not provided, an internal controller will be created.
+  /// Use this to move the map, change zoom, or manage markers at runtime.
+  /// If omitted, an internal controller is created and managed automatically.
   final NeshanMapController? controller;
 
-  /// API key for Neshan reverse-geocoding service.
+  /// API key for Neshan reverse-geocoding.
   ///
-  /// **When provided:** Enables address display at the top of the map.
-  /// As the user moves the map, addresses will be automatically fetched and displayed.
+  /// **Provided:** Enables the address bar at the top of the map. As the user
+  /// pans, the address at the centre pin is fetched and displayed.
   ///
-  /// **When null:** No address display will be shown.
+  /// **Omitted:** No address bar is shown, and the accept button is enabled as
+  /// soon as the map reports its first centre coordinate.
   ///
-  /// Get your API key from: https://platform.neshan.org/
+  /// Obtain your key at https://platform.neshan.org/.
   final String? reverseGeocodingApiKey;
 
-  /// API key for Neshan search service.
+  /// API key for Neshan search.
   ///
-  /// **When provided (with reverseGeocodingApiKey):** Enables the search button
-  /// on the address display. Users can tap it to search for locations.
+  /// **Provided (together with [reverseGeocodingApiKey]):** Adds a search icon
+  /// to the address bar. Tapping it opens the search screen.
   ///
-  /// **When null:** No search functionality will be available.
+  /// **Omitted:** No search functionality is available.
   ///
-  /// **Note:** Requires [reverseGeocodingApiKey] to also be set, since search
-  /// results need to display addresses.
-  ///
-  /// Get your API key from: https://platform.neshan.org/
+  /// Obtain your key at https://platform.neshan.org/.
   final String? searchApiKey;
 
-  /// Optional timing configuration for debounce durations.
+  /// Timing configuration (debounce durations).
   ///
-  /// Controls how long to wait before making API calls after user actions
-  /// (moving the map, typing in search).
+  /// Controls how long the widget waits after the map stops moving before
+  /// calling the geocoding API, and how long it waits after the user stops
+  /// typing before calling the search API.
   ///
-  /// If not provided, uses default values (300ms for both).
+  /// If omitted, defaults to 300 ms for both.
   final NeshanLocationPickerConfig? locationPickerConfig;
 
-  /// Callback that is called when the accept location button is pressed.
+  /// Called when the user presses the accept button.
   ///
-  /// Provides both the position (LatLng) and the formatted address string.
+  /// Receives the selected [LatLng] position and the formatted address string.
+  /// If [reverseGeocodingApiKey] is not set, the address will be an empty string.
   final void Function(LatLng position, String address)? onLocationAccepted;
 
-  /// Callback that is called when the map center changes.
+  /// Called whenever the map centre changes.
   ///
-  /// Called whenever the user moves the map or when the map is moved programmatically.
+  /// Fired both on user pan and on programmatic moves via [controller].
   final void Function(double lat, double lng)? onLocationChanged;
 
-  /// Callback that is called when an address is fetched from reverse-geocoding.
+  /// Called when reverse-geocoding returns a new address.
   ///
-  /// Only called when [reverseGeocodingApiKey] is provided.
-  /// Provides both the formatted address string and the full response object.
+  /// Only fired when [reverseGeocodingApiKey] is provided.
   final void Function(String address, ReverseGeocodingResponse response)?
   onAddressChanged;
 
-  /// Callback that is called when any Neshan API error occurs.
+  /// Called when any Neshan API request fails.
   ///
-  /// This includes errors from:
-  /// - Reverse geocoding service
-  /// - Search service
+  /// Covers errors from the reverse-geocoding and search services.
   final void Function(NeshanApiError error)? onApiError;
 
-  /// Callback that is called when a general error occurs.
+  /// Called on general (non-API) errors.
   final NeshanErrorCallback? onError;
 
-  /// Optional UI customization configuration.
+  /// UI customization for the three overlay widgets.
   ///
-  /// Contains builder functions for customizing the three core UI components:
-  /// - Address display (top of map)
-  /// - Accept button (bottom of map)
-  /// - Center marker
+  /// Provide custom builders for:
+  /// - `addressDisplayBuilder` — The address bar at the top of the map.
+  /// - `acceptButtonBuilder` — The confirm button at the bottom.
+  /// - `centerMarkerBuilder` — The pin at the centre of the map.
   ///
-  /// If null, all components use their default implementations.
+  /// Any builder left `null` falls back to the default implementation.
   ///
   /// ## Example
   ///
@@ -220,31 +225,21 @@ class NeshanLocationPicker extends StatefulWidget {
   ///   mapKey: 'key',
   ///   reverseGeocodingApiKey: 'geocoding-key',
   ///   uiConfig: LocationPickerUiConfig(
-  ///     addressDisplayBuilder: (context, data) {
-  ///       return CustomAddressCard(
-  ///         address: data.formattedAddress,
-  ///         city: data.fullResponse?.city,
-  ///         isLoading: data.isLoading,
-  ///       );
-  ///     },
-  ///     acceptButtonBuilder: (context, data) {
-  ///       return CustomButton(onPressed: data.onPressed);
-  ///     },
-  ///     centerMarkerBuilder: (context) {
-  ///       return Icon(Icons.place, size: 48, color: Colors.red);
-  ///     },
+  ///     acceptButtonBuilder: (context, data) => ElevatedButton(
+  ///       onPressed: data.onPressed,
+  ///       child: const Text('Confirm'),
+  ///     ),
+  ///     centerMarkerBuilder: (context) =>
+  ///         const Icon(Icons.place, size: 48, color: Colors.red),
   ///   ),
   /// )
   /// ```
   final LocationPickerUiConfig? uiConfig;
 
-  /// Whether to enable debug logging for the location picker.
+  /// Enables verbose debug logging to the console.
   ///
-  /// When enabled, the location picker will print detailed debug information to
-  /// the console, including reverse-geocoding requests/responses, search operations,
-  /// and location changes.
-  ///
-  /// Defaults to `false`.
+  /// Logs reverse-geocoding requests/responses, search operations, and
+  /// location changes. Defaults to `false`.
   final bool enableDebug;
 
   @override
@@ -389,6 +384,7 @@ class _NeshanLocationPickerState extends State<NeshanLocationPicker> {
               mapKey: widget.mapKey,
               controller: _mapController,
               config: mapConfig,
+              markers: widget.markers,
               onLocationChanged: _handleLocationChanged,
               onError: widget.onError,
               enableDebug: widget.enableDebug,

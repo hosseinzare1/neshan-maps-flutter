@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../utils/neshan_common.dart';
 import 'controller/neshan_map_controller.dart';
 import 'config/neshan_map_config.dart';
+import 'models/neshan_marker.dart';
 import '../utils/neshan_map_logger.dart';
 
 // Platform-specific implementations with conditional imports
@@ -16,23 +17,42 @@ import 'platform/web/neshan_map_web_widget.dart'
 
 /// A cross-platform widget that displays a Neshan map.
 ///
-/// This widget provides a unified API for displaying Neshan maps across
-/// different platforms:
-/// - **Mobile (iOS/Android)**: Uses WebView to display the map
-/// - **Web**: Uses an iframe to embed the HTML map
+/// Supports **iOS**, **Android**, and **Web**:
+/// - **Mobile**: renders the map inside a [WebView].
+/// - **Web**: renders the map inside an `<iframe>`.
 ///
-/// ## Features
+/// ## Key Parameters
 ///
-/// - **Location Updates**: The map automatically sends location updates
-///   when the center changes via the [onLocationChanged] callback.
-/// - **Programmatic Control**: Use [NeshanMapController] to move the map,
-///   change zoom, and perform other operations from Dart code.
-/// - **Customizable Marker**: Display a custom marker at the center of the map,
-///   or use the default location pin icon.
-/// - **Error Handling**: Handle errors via the [onError] callback.
-/// - **Configuration**: Customize initial map state via [NeshanMapConfig].
+/// | Parameter | Purpose |
+/// |---|---|
+/// | [mapKey] | Neshan API key (required) |
+/// | [config] | Viewport & style settings ([NeshanMapConfig]) |
+/// | [markers] | Initial set of [NeshanMarker]s to show on the map |
+/// | [controller] | [NeshanMapController] for programmatic control |
+/// | [onLocationChanged] | Called when the map centre changes |
+/// | [onMarkerTapped] | Called when a marker is tapped |
+/// | [onError] | Called on general errors |
+/// | [onLocationError] | Called on location-permission / service errors |
 ///
-/// ## Usage Example
+/// ## Basic Usage
+///
+/// ```dart
+/// NeshanMap(
+///   mapKey: 'your-neshan-api-key',
+///   config: NeshanMapConfig(
+///     initialCenter: LatLng(35.6892, 51.3890),
+///     initialZoom: 15.0,
+///   ),
+///   onLocationChanged: (lat, lng) {
+///     debugPrint('Centre: $lat, $lng');
+///   },
+/// )
+/// ```
+///
+/// ## With Markers
+///
+/// Markers are passed directly to the widget, not via [NeshanMapConfig].
+/// To add or remove markers after the map has loaded use [NeshanMapController]:
 ///
 /// ```dart
 /// final controller = NeshanMapController();
@@ -40,24 +60,24 @@ import 'platform/web/neshan_map_web_widget.dart'
 /// NeshanMap(
 ///   mapKey: 'your-neshan-api-key',
 ///   controller: controller,
-///   config: NeshanMapConfig(
-///     initialCenter: LatLng(35.6892, 51.3890),
-///     initialZoom: 15.0,
-///   ),
-///   onLocationChanged: (lat, lng) {
-///     print('Map center: $lat, $lng');
-///   },
-///   onError: (message, description) {
-///     print('Error: $message - $description');
-///   },
+///   markers: [
+///     NeshanMarker(
+///       id: 'hq',
+///       position: LatLng(35.6892, 51.3890),
+///       title: 'HQ',
+///       color: Colors.red,
+///     ),
+///   ],
 /// )
 ///
-/// // Later, move the map programmatically:
+/// // Programmatically add another marker later:
 /// await controller.ready;
-/// controller.moveToLocation(35.6892, 51.3890, zoom: 15);
+/// controller.addMarker(
+///   NeshanMarker(id: 'branch', position: LatLng(35.70, 51.40)),
+/// );
 /// ```
 ///
-/// ## Platform-Specific Notes
+/// ## Platform Notes
 ///
 /// - On mobile, the map is rendered in a WebView, which requires internet
 ///   connectivity to load the Neshan SDK.
@@ -68,31 +88,33 @@ import 'platform/web/neshan_map_web_widget.dart'
 class NeshanMap extends StatefulWidget {
   /// Creates a Neshan map widget.
   ///
-  /// [mapKey] is the Neshan API key required to display the map.
+  /// [mapKey] — The Neshan API key. Required.
   ///
-  /// [controller] allows programmatic control of the map location.
-  /// Use [NeshanMapController] to move the map to specific locations.
+  /// [config] — Viewport and style settings. Uses sensible defaults
+  /// (Tehran centre, zoom 12, vector map) when omitted.
   ///
-  /// [config] allows you to configure the initial map state and behavior.
-  /// If not provided, default values will be used.
+  /// [markers] — Initial list of [NeshanMarker]s placed on the map when it
+  /// first loads. To mutate markers at runtime use [controller].
   ///
-  /// [onLocationChanged] will be called whenever the map center changes.
+  /// [controller] — Optional [NeshanMapController] for programmatic control
+  /// (move, zoom, add/remove markers, etc.).
   ///
-  /// [onMarkerTapped] callback is called when a marker is tapped.
-  /// Provides the ID of the tapped marker.
+  /// [onLocationChanged] — Fired whenever the map centre changes.
   ///
-  /// [onError] callback is called when an error occurs (e.g., WebView errors,
-  /// HTML loading errors, JSON parsing errors).
+  /// [onMarkerTapped] — Fired when a marker is tapped; receives the marker ID.
   ///
-  /// [onLocationError] callback is called when location permission or service
-  /// errors occur (e.g., permission denied, location service disabled).
+  /// [onError] — Fired on WebView / iframe / parsing errors.
   ///
-  /// [enableDebug] enables detailed debug logging when set to `true`.
+  /// [onLocationError] — Fired when location permission is denied or the
+  /// location service is disabled.
+  ///
+  /// [enableDebug] — Enables verbose console logging. Defaults to `false`.
   const NeshanMap({
     super.key,
     required this.mapKey,
-    this.controller,
     this.config,
+    this.markers = const [],
+    this.controller,
     this.onLocationChanged,
     this.onMarkerTapped,
     this.onError,
@@ -101,43 +123,60 @@ class NeshanMap extends StatefulWidget {
   });
 
   /// The Neshan API key required to display the map.
+  ///
+  /// Obtain your key at https://platform.neshan.org/.
   final String mapKey;
+
+  /// Viewport and style configuration for the map.
+  ///
+  /// Controls the initial centre, zoom, map type, traffic layer, POI rendering,
+  /// and the current-location FAB. All fields have sensible defaults — you only
+  /// need to provide values you want to override.
+  ///
+  /// If omitted, the map opens centred on Tehran at zoom 12.
+  final NeshanMapConfig? config;
+
+  /// Initial list of markers to display on the map.
+  ///
+  /// These markers are placed on the map when it first finishes loading.
+  /// To add, remove, or replace markers after the map has loaded, use the
+  /// methods on [controller] ([NeshanMapController.addMarker],
+  /// [NeshanMapController.removeMarker], [NeshanMapController.updateMarkers],
+  /// [NeshanMapController.clearMarkers]).
+  ///
+  /// Defaults to an empty list.
+  final List<NeshanMarker> markers;
 
   /// Optional controller for programmatic map control.
   ///
-  /// Use this to move the map to specific locations from Dart code.
+  /// Provides methods to move the camera, change zoom, and manage markers
+  /// at runtime. Await [NeshanMapController.ready] before calling any method
+  /// to ensure the map is fully loaded.
   final NeshanMapController? controller;
 
-  /// Optional configuration for the initial map state and behavior.
+  /// Called whenever the map centre changes (pan or programmatic move).
   ///
-  /// If not provided, default values will be used (Tehran center, zoom 12, etc.).
-  final NeshanMapConfig? config;
-
-  /// Callback that is called when the map center changes.
-  ///
-  /// Provides the latitude and longitude of the map center.
+  /// Provides the new latitude and longitude of the map centre.
   final void Function(double lat, double lng)? onLocationChanged;
 
-  /// Callback that is called when a marker is tapped.
+  /// Called when a marker on the map is tapped.
   ///
-  /// Provides the ID of the tapped marker.
+  /// Receives the [NeshanMarker.id] of the tapped marker.
   final void Function(String markerId)? onMarkerTapped;
 
-  /// Callback that is called when an error occurs.
-  ///
+  /// Called when a general error occurs (WebView error, iframe error, JSON
+  /// parse failure, etc.).
   final NeshanErrorCallback? onError;
 
-  /// Callback that is called when a location error occurs.
+  /// Called when a location-related error occurs.
   ///
-  /// This includes permission errors, location service errors, and tracking errors.
+  /// Covers permission denied, location service disabled, and tracking errors.
   final NeshanErrorCallback? onLocationError;
 
-  /// Whether to enable debug logging for the map.
+  /// Enables verbose debug logging to the console.
   ///
-  /// When enabled, the map will print detailed debug information to the console,
-  /// including initialization steps, location updates, marker operations, and errors.
-  ///
-  /// Defaults to `false`.
+  /// Logs include initialisation steps, location updates, marker operations,
+  /// and errors. Defaults to `false`.
   final bool enableDebug;
 
   @override
@@ -163,6 +202,7 @@ class _NeshanMapState extends State<NeshanMap> {
         mapKey: widget.mapKey,
         controller: widget.controller,
         config: widget.config,
+        markers: widget.markers,
         onLocationChanged: widget.onLocationChanged,
         onMarkerTapped: widget.onMarkerTapped,
         onError: widget.onError,
@@ -174,6 +214,7 @@ class _NeshanMapState extends State<NeshanMap> {
         mapKey: widget.mapKey,
         controller: widget.controller,
         config: widget.config,
+        markers: widget.markers,
         onLocationChanged: widget.onLocationChanged,
         onMarkerTapped: widget.onMarkerTapped,
         onError: widget.onError,

@@ -1,7 +1,5 @@
 import 'package:latlong2/latlong.dart';
 
-import '../models/neshan_marker.dart';
-
 /// Enum representing the different types of Neshan maps available.
 enum NeshanMapType {
   /// Neshan vector map (default)
@@ -31,106 +29,128 @@ enum NeshanMapType {
   }
 }
 
-/// Configuration for initializing a Neshan map.
+/// Viewport and style configuration for initializing a [NeshanMap].
 ///
-/// This class allows you to configure the initial state and behavior of the map.
-/// All parameters are optional and will use sensible defaults if not provided.
+/// This class holds **static initial-state** values that describe how the map
+/// is rendered at startup: the viewport position, zoom bounds, map style, and
+/// overlay toggles. It is intentionally scoped to these concerns.
+///
+/// **Markers are not part of this config.** Pass them directly to the
+/// [NeshanMap.markers] parameter so they live alongside the controller and
+/// other widget-level data, keeping this class focused solely on viewport
+/// configuration.
+///
+/// All parameters are optional and fall back to sensible defaults.
 ///
 /// ## Usage Example
 ///
 /// ```dart
-/// final config = NeshanMapConfig(
-///   initialCenter: LatLng(35.6892, 51.3890), // Tehran, Iran
-///   initialZoom: 15.0,
-///   mapType: NeshanMapType.neshanVector,
-///   minZoom: 5.0,
-///   maxZoom: 18.0,
-///   showPoi: true,
-///   showTraffic: false,
-/// );
-///
 /// NeshanMap(
 ///   mapKey: 'your-api-key',
-///   config: config,
+///   config: NeshanMapConfig(
+///     initialCenter: LatLng(35.6892, 51.3890), // Tehran, Iran
+///     initialZoom: 15.0,
+///     mapType: NeshanMapType.neshanVector,
+///     showTraffic: true,
+///   ),
+///   markers: [
+///     NeshanMarker(
+///       id: 'hq',
+///       position: LatLng(35.6892, 51.3890),
+///       title: 'HQ',
+///     ),
+///   ],
 /// )
 /// ```
 ///
 /// ## Default Values
 ///
-/// - **initialCenter**: `LatLng(35.6892, 51.3890)` (Tehran, Iran)
-/// - **initialZoom**: `12.0`
-/// - **mapType**: `NeshanMapType.neshanVector`
-/// - **minZoom**: `2.0`
-/// - **maxZoom**: `21.0`
-/// - **showPoi**: `true`
-/// - **showTraffic**: `false`
+/// | Parameter | Default |
+/// |---|---|
+/// | [initialCenter] | `LatLng(35.6892, 51.3890)` (Tehran) |
+/// | [initialZoom] | `12.0` |
+/// | [mapType] | [NeshanMapType.neshanVector] |
+/// | [minZoom] | `2.0` |
+/// | [maxZoom] | `21.0` |
+/// | [showPoi] | `true` |
+/// | [showTraffic] | `false` |
+/// | [showCurrentLocationButton] | `true` |
 ///
 /// ## Map Types
 ///
-/// Available map types via [NeshanMapType] enum:
-/// - `NeshanMapType.neshanVector` - Neshan vector map (default)
-/// - `NeshanMapType.neshanVectorNight` - Neshan vector map (night mode)
-/// - `NeshanMapType.neshanRaster` - Neshan raster map
-/// - `NeshanMapType.neshanRasterNight` - Neshan raster map (night mode)
+/// Available map types via [NeshanMapType]:
+/// - [NeshanMapType.neshanVector] — default vector map
+/// - [NeshanMapType.neshanVectorNight] — vector map, night mode
+/// - [NeshanMapType.neshanRaster] — raster map
+/// - [NeshanMapType.neshanRasterNight] — raster map, night mode
 class NeshanMapConfig {
-  /// Creates a map configuration with the specified parameters.
+  /// Creates a viewport/style configuration for a [NeshanMap].
   ///
-  /// [initialCenter] - The initial center of the map (default: Tehran, Iran).
-  /// [initialZoom] - The initial zoom level (default: 12).
-  /// [mapType] - The type of map to display (default: NeshanMapType.neshanVector).
-  /// [minZoom] - The minimum zoom level (default: 2).
-  /// [maxZoom] - The maximum zoom level (default: 21).
-  /// [showPoi] - Whether to show points of interest (default: true).
-  /// [showTraffic] - Whether to show traffic information (default: false).
-  /// [markers] - List of markers to display on the map (default: empty list).
-  /// [showCurrentLocationButton] - Whether to show the current location button (default: true).
+  /// [initialCenter] — Initial center coordinate (default: Tehran, Iran).
+  /// [initialZoom] — Initial zoom level (default: `12.0`).
+  /// [mapType] — Map style to display (default: [NeshanMapType.neshanVector]).
+  /// [minZoom] — Minimum allowed zoom level (default: `2.0`).
+  /// [maxZoom] — Maximum allowed zoom level (default: `21.0`).
+  /// [showPoi] — Whether to render points of interest (default: `true`).
+  /// [showTraffic] — Whether to render the traffic layer (default: `false`).
+  /// [showCurrentLocationButton] — Whether to show the current-location FAB
+  /// (default: `true`).
   const NeshanMapConfig({
-    this.initialCenter = const LatLng(35.6892, 51.3890), // Tehran, Iran
+    this.initialCenter = const LatLng(35.6892, 51.3890),
     this.initialZoom = 12.0,
     this.mapType = NeshanMapType.neshanVector,
     this.minZoom = 2.0,
     this.maxZoom = 21.0,
     this.showPoi = true,
     this.showTraffic = false,
-    this.markers = const [],
     this.showCurrentLocationButton = true,
   });
 
-  /// The initial center of the map.
+  /// The initial center coordinate of the map.
+  ///
+  /// Defaults to Tehran, Iran (`LatLng(35.6892, 51.3890)`).
   final LatLng initialCenter;
 
   /// The initial zoom level.
+  ///
+  /// Must be between [minZoom] and [maxZoom]. Defaults to `12.0`.
   final double initialZoom;
 
-  /// The type of map to display.
+  /// The map style to display.
   ///
-  /// See [NeshanMapType] for available options.
+  /// See [NeshanMapType] for available options. Defaults to
+  /// [NeshanMapType.neshanVector].
   final NeshanMapType mapType;
 
-  /// The minimum zoom level.
+  /// The minimum zoom level the user can zoom out to.
+  ///
+  /// Defaults to `2.0`.
   final double minZoom;
 
-  /// The maximum zoom level.
+  /// The maximum zoom level the user can zoom in to.
+  ///
+  /// Defaults to `21.0`.
   final double maxZoom;
 
-  /// Whether to show points of interest.
+  /// Whether to render points of interest on the map.
+  ///
+  /// Defaults to `true`.
   final bool showPoi;
 
-  /// Whether to show traffic information.
+  /// Whether to render the traffic layer on the map.
+  ///
+  /// Defaults to `false`.
   final bool showTraffic;
 
-  /// List of markers to display on the map.
-  final List<NeshanMarker> markers;
-
-  /// Whether to show the current location button.
+  /// Whether to show the current-location floating action button.
   ///
-  /// When enabled, a floating action button is displayed in the bottom-right
-  /// corner of the map that allows users to center the map on their current location.
+  /// When `true`, a FAB is shown in the bottom-right corner. Tapping it:
+  /// - Requests location permission if not already granted.
+  /// - Opens location-service settings if the service is disabled.
+  /// - Starts continuous location tracking.
+  /// - On the first update, flies the map to the user's position; subsequent
+  ///   updates only move the location dot without re-centering the map.
   ///
-  /// The button will:
-  /// - Request location permissions if not granted
-  /// - Request location services if disabled
-  /// - Track user location continuously
-  /// - Move map to location on first tap, then just update marker position
+  /// Defaults to `true`.
   final bool showCurrentLocationButton;
 }

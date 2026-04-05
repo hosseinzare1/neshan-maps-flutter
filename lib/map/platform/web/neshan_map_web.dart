@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../utils/neshan_common.dart';
 import '../../controller/neshan_map_controller.dart';
 import '../../config/neshan_map_config.dart';
+import '../../models/neshan_marker.dart';
 import '../../../utils/neshan_map_logger.dart';
 
 /// Global map of iframe references by unique ID for location updates
@@ -69,6 +70,7 @@ Widget createWebHtmlView({
   required String mapKey,
   required String iframeId,
   NeshanMapConfig? config,
+  List<NeshanMarker> markers = const [],
   NeshanMapController? controller,
   void Function(double lat, double lng)? onLocationChanged,
   void Function(String markerId)? onMarkerTapped,
@@ -81,6 +83,7 @@ Widget createWebHtmlView({
     htmlContent,
     mapKey,
     config,
+    markers,
     onError,
     logger,
   );
@@ -144,6 +147,7 @@ web.HTMLIFrameElement _createIframe(
   String htmlContent,
   String mapKey,
   NeshanMapConfig? config,
+  List<NeshanMarker> markers,
   NeshanErrorCallback? onError,
   NeshanMapLogger logger,
 ) {
@@ -161,7 +165,7 @@ web.HTMLIFrameElement _createIframe(
     ((web.Event _) {
       logger.log('Iframe loaded and ready');
       // Inject configuration after iframe loads
-      _injectConfigurationToIframe(iframe, mapKey, config, logger);
+      _injectConfigurationToIframe(iframe, mapKey, config, markers, logger);
     }).toJS,
   );
 
@@ -183,13 +187,14 @@ void _injectConfigurationToIframe(
   web.HTMLIFrameElement iframe,
   String mapKey,
   NeshanMapConfig? config,
+  List<NeshanMarker> markers,
   NeshanMapLogger logger,
 ) {
   final configObj = config ?? const NeshanMapConfig();
 
   logger.log(
     'Injecting configuration - center: (${configObj.initialCenter.latitude}, ${configObj.initialCenter.longitude}), '
-    'zoom: ${configObj.initialZoom}, markers: ${configObj.markers.length}',
+    'zoom: ${configObj.initialZoom}, markers: ${markers.length}',
   );
 
   // Use postMessage to send configuration to iframe
@@ -208,7 +213,7 @@ void _injectConfigurationToIframe(
       'maxZoom': configObj.maxZoom,
       'poi': configObj.showPoi,
       'traffic': configObj.showTraffic,
-      'markers': configObj.markers.map((m) => m.toJson()).toList(),
+      'markers': markers.map((m) => m.toJson()).toList(),
     },
   };
 

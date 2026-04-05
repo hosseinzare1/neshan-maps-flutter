@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../utils/neshan_common.dart';
 import '../controller/neshan_map_controller.dart';
 import '../config/neshan_map_config.dart';
+import '../models/neshan_marker.dart';
 import '../../utils/neshan_map_logger.dart';
 
 /// Stub widget for mobile implementation.
@@ -14,6 +15,7 @@ class NeshanMapMobileWidget extends StatelessWidget {
     required this.mapKey,
     this.controller,
     this.config,
+    this.markers = const [],
     this.onLocationChanged,
     this.onMarkerTapped,
     this.onError,
@@ -24,6 +26,7 @@ class NeshanMapMobileWidget extends StatelessWidget {
   final String mapKey;
   final NeshanMapController? controller;
   final NeshanMapConfig? config;
+  final List<NeshanMarker> markers;
   final void Function(double lat, double lng)? onLocationChanged;
   final void Function(String markerId)? onMarkerTapped;
   final NeshanErrorCallback? onError;
@@ -48,6 +51,7 @@ class NeshanMapWebWidget extends StatelessWidget {
     required this.mapKey,
     this.controller,
     this.config,
+    this.markers = const [],
     this.onLocationChanged,
     this.onMarkerTapped,
     this.onError,
@@ -58,6 +62,7 @@ class NeshanMapWebWidget extends StatelessWidget {
   final String mapKey;
   final NeshanMapController? controller;
   final NeshanMapConfig? config;
+  final List<NeshanMarker> markers;
   final void Function(double lat, double lng)? onLocationChanged;
   final void Function(String markerId)? onMarkerTapped;
   final NeshanErrorCallback? onError;
@@ -82,6 +87,7 @@ Widget createWebHtmlView({
   required String mapKey,
   required String iframeId,
   NeshanMapConfig? config,
+  List<NeshanMarker> markers = const [],
   NeshanMapController? controller,
   void Function(double lat, double lng)? onLocationChanged,
   void Function(String markerId)? onMarkerTapped,

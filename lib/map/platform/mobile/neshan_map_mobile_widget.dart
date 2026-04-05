@@ -5,6 +5,7 @@ import '../../../utils/neshan_map_logger.dart';
 import '../../../utils/neshan_common.dart';
 import '../../controller/neshan_map_controller.dart';
 import '../../config/neshan_map_config.dart';
+import '../../models/neshan_marker.dart';
 import '../../location_tracking/location_tracking_mixin.dart';
 import '../../widgets/current_location_button.dart';
 
@@ -22,6 +23,7 @@ class NeshanMapMobileWidget extends StatefulWidget {
     required this.mapKey,
     this.controller,
     this.config,
+    this.markers = const [],
     this.onLocationChanged,
     this.onMarkerTapped,
     this.onError,
@@ -32,6 +34,7 @@ class NeshanMapMobileWidget extends StatefulWidget {
   final String mapKey;
   final NeshanMapController? controller;
   final NeshanMapConfig? config;
+  final List<NeshanMarker> markers;
   final void Function(double lat, double lng)? onLocationChanged;
   final void Function(String markerId)? onMarkerTapped;
   final NeshanErrorCallback? onError;
@@ -193,11 +196,11 @@ class _NeshanMapMobileWidgetState extends State<NeshanMapMobileWidget>
   void _injectConfiguration() {
     final config = widget.config ?? const NeshanMapConfig();
     final markersJson = jsonEncode(
-      config.markers.map((m) => m.toJson()).toList(),
+      widget.markers.map((m) => m.toJson()).toList(),
     );
     widget.logger.log(
       'Injecting configuration - center: (${config.initialCenter.latitude}, ${config.initialCenter.longitude}), '
-      'zoom: ${config.initialZoom}, markers: ${config.markers.length}',
+      'zoom: ${config.initialZoom}, markers: ${widget.markers.length}',
     );
     final script =
         '''

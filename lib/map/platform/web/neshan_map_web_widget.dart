@@ -6,6 +6,7 @@ import '../../../utils/neshan_map_logger.dart';
 import '../../../utils/neshan_common.dart';
 import '../../controller/neshan_map_controller.dart';
 import '../../config/neshan_map_config.dart';
+import '../../models/neshan_marker.dart';
 import 'neshan_map_web.dart'
     if (dart.library.io) 'neshan_map_stub.dart'
     as web_impl;
@@ -27,6 +28,7 @@ class NeshanMapWebWidget extends StatefulWidget {
     required this.mapKey,
     this.controller,
     this.config,
+    this.markers = const [],
     this.onLocationChanged,
     this.onMarkerTapped,
     this.onError,
@@ -37,6 +39,7 @@ class NeshanMapWebWidget extends StatefulWidget {
   final String mapKey;
   final NeshanMapController? controller;
   final NeshanMapConfig? config;
+  final List<NeshanMarker> markers;
   final void Function(double lat, double lng)? onLocationChanged;
   final void Function(String markerId)? onMarkerTapped;
   final NeshanErrorCallback? onError;
@@ -136,6 +139,7 @@ class _NeshanMapWebWidgetState extends State<NeshanMapWebWidget>
       mapKey: widget.mapKey,
       iframeId: _iframeId,
       config: widget.config,
+      markers: widget.markers,
       controller: widget.controller,
       onLocationChanged: widget.onLocationChanged,
       onMarkerTapped: widget.onMarkerTapped,
