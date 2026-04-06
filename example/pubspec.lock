@@ -283,9 +283,10 @@ packages:
   neshan_maps_flutter:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      name: neshan_maps_flutter
+      sha256: faf8cba175dac6c212edbd87474e6ac56e149fffd0500ee2cb1396358e0a499b
+      url: "https://pub.dev"
+    source: hosted
     version: "1.0.0"
   package_info_plus:
     dependency: transitive

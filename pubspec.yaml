@@ -1,6 +1,6 @@
 name: neshan_maps_flutter
 description: "A Flutter SDK for Neshan Maps. Provides an interactive map widget and a ready-to-use location picker with reverse-geocoding and search."
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/hosseinzare1/neshan-maps-flutter
 repository: https://github.com/hosseinzare1/neshan-maps-flutter
 issue_tracker: https://github.com/hosseinzare1/neshan-maps-flutter/issues
