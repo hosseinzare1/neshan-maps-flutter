@@ -10,47 +10,47 @@ A Flutter SDK for integrating [Neshan Maps](https://platform.neshan.org/) into y
 - **Location Picker** — draggable centre-pin with automatic reverse-geocoding and built-in place search
 - **Customisable UI** — override the address bar, confirm button, and centre marker with your own widgets
 
----
+## Screenshots
+
+| NeshanMap | NeshanLocationPicker | Location Search |
+|:---------:|:--------------------:|:---------------:|
+| ![Map](https://raw.githubusercontent.com/hosseinzare1/neshan-maps-flutter/main/screenshots/map.png) | ![Picker](https://raw.githubusercontent.com/hosseinzare1/neshan-maps-flutter/main/screenshots/picker.png) | ![Search](https://raw.githubusercontent.com/hosseinzare1/neshan-maps-flutter/main/screenshots/search.png) |
 
 ## Table of Contents
 
 - [Getting API Keys](#getting-api-keys)
 - [Installation](#installation)
-- [Location Permission Setup](#location-permission-setup)
 - [Screenshots](#screenshots)
 - [Quick Start](#quick-start)
+- [Location Permission Setup](#location-permission-setup)
 - [NeshanMap — Full Reference](#neshanmap--full-reference)
 - [NeshanLocationPicker — Full Reference](#neshanlocationpicker--full-reference)
 - [Imports](#imports)
 - [Contributing](#contributing)
 - [License](#license)
 
----
-
 ## Getting API Keys
 
-Register at **[platform.neshan.org](https://platform.neshan.org/)** and create the following keys:
+Register at **[platform.neshan.org](https://platform.neshan.org/)** and create these keys:
 
 
-| Key                      | Used for                                                             |
-| ------------------------ | -------------------------------------------------------------------- |
-| `mapKey`                 | Displaying the map — required for both widgets                       |
-| `reverseGeocodingApiKey` | Converting coordinates to an address string (`NeshanLocationPicker`) |
-| `searchApiKey`           | Searching for places by name (`NeshanLocationPicker`)                |
+| Key                      | Used for                                                                              | Docs                                                                                         |
+| ------------------------ | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `mapKey`                 | Displaying the map. Required for both `NeshanMap` and `NeshanLocationPicker`.        | —                                                                                            |
+| `reverseGeocodingApiKey` | Converting coordinates to an address string. Required only for `NeshanLocationPicker`. | [Reverse Geocoding API](https://platform.neshan.org/docs/api/search-category/reverse-geocoding/) |
+| `searchApiKey`           | Searching for places by name. Optional for `NeshanLocationPicker`. | [Search API](https://platform.neshan.org/docs/api/search-category/search/)                     |
 
 
 ### Important notes
 
 **The `mapKey` must be a Web key.**
-This package renders the Neshan map using the Neshan Web SDK on all platforms (via a WebView on mobile and an `<iframe>` on web). When creating the key in the Neshan dashboard, select **Web** as the platform — an Android or iOS key will not work.
+This package uses the Neshan Web SDK on all platforms (WebView on mobile, `<iframe>` on web), so generate a **Web** key. Android/iOS keys will not work.
 
 **Do not restrict the allowed domain / IP.**
-Because requests originate from a WebView (on device) rather than a known server domain, setting an allowed-domain or IP restriction on the key will cause map loading to fail. Leave this field unrestricted.
+Requests come from a device WebView, not a fixed backend domain/IP. Restricting domain or IP can break map loading.
 
 **Keep keys out of your source code.**
-Never commit API keys to version control. A recommended approach is to serve the keys from your own backend API and fetch them at runtime, so they are never bundled inside the app binary.
-
----
+Never commit keys. Prefer fetching them from your backend at runtime instead of bundling them in the app.
 
 ## Installation
 
@@ -66,26 +66,6 @@ Then run:
 ```sh
 flutter pub get
 ```
-
----
-
-## Location Permission Setup
-
-> **This step is optional.** It is only required if you want to show the user's current location on the map via `showCurrentLocationButton: true` in `NeshanMapConfig` (the default).  
-> If you set `showCurrentLocationButton: false`, you can skip this section entirely.
-
-This package uses the [geolocator](https://pub.dev/packages/geolocator) plugin internally to access device location. Follow the **platform-specific permission instructions** in the [geolocator documentation](https://pub.dev/packages/geolocator#usage) to add the required entries to your `AndroidManifest.xml`, `Info.plist`, and any other platform files.
-
----
-
-## Screenshots
-
-| NeshanMap | NeshanLocationPicker | Location Search |
-|:---------:|:--------------------:|:---------------:|
-| ![Map](https://raw.githubusercontent.com/hosseinzare1/neshan-maps-flutter/main/screenshots/map.png) | ![Picker](https://raw.githubusercontent.com/hosseinzare1/neshan-maps-flutter/main/screenshots/picker.png) | ![Search](https://raw.githubusercontent.com/hosseinzare1/neshan-maps-flutter/main/screenshots/search.png) |
-
-
----
 
 ## Quick Start
 
@@ -117,7 +97,12 @@ NeshanLocationPicker(
 
 As the user pans, the address bar at the top updates automatically. Tapping the confirm button triggers `onLocationAccepted`.
 
----
+## Location Permission Setup
+
+> **This step is optional.** It is only required if you want to show the user's current location on the map via `showCurrentLocationButton: true` in `NeshanMapConfig` (the default).  
+> If you set `showCurrentLocationButton: false`, you can skip this section entirely.
+
+This package uses the [geolocator](https://pub.dev/packages/geolocator) plugin internally to access device location. Follow the **platform-specific permission instructions** in the [geolocator documentation](https://pub.dev/packages/geolocator#usage) to add the required entries to your `AndroidManifest.xml`, `Info.plist`, and any other platform files.
 
 ## NeshanMap — Full Reference
 
@@ -208,8 +193,6 @@ class _MapPageState extends State<MapPage> {
 | `enableDebug`       | `bool`                                   |          | `false` | Enables verbose console logging.                                               |
 
 
----
-
 ### NeshanMapConfig
 
 Controls the initial viewport and style of the map. All parameters are optional.
@@ -251,8 +234,6 @@ NeshanMapConfig(
 | `NeshanMapType.neshanRasterNight` | Raster map in night mode |
 
 
----
-
 ### NeshanMarker
 
 Represents a pin on the map.
@@ -276,8 +257,6 @@ NeshanMarker(
 | `title`     | `String?` |          | Text shown in a popup when the marker is tapped.                   |
 | `draggable` | `bool`    |          | Whether the user can drag the marker. Default `false`.             |
 
-
----
 
 ### NeshanMapController
 
@@ -329,15 +308,13 @@ controller.dispose();
 | `dispose()`                           | `void`            | Releases resources. Call in your widget's `dispose()`. |
 
 
----
-
 ## NeshanLocationPicker — Full Reference
 
 > The picker is ready to use out of the box — no extra configuration is needed beyond the API keys.  
 > For deeper understanding of the underlying APIs, refer to the official Neshan documentation:
 >
-> - Reverse Geocoding API: [platform.neshan.org/docs/api/search-category/reverse-geocoding](https://platform.neshan.org/docs/api/search-category/reverse-geocoding/)
-> - Search API: [platform.neshan.org/docs/api/search-category/search](https://platform.neshan.org/docs/api/search-category/search/)
+> - [Reverse Geocoding API](https://platform.neshan.org/docs/api/search-category/reverse-geocoding/)
+> - [Search API](https://platform.neshan.org/docs/api/search-category/search/)
 
 `NeshanLocationPicker` wraps `NeshanMap` and adds:
 
@@ -408,8 +385,6 @@ class PickerPage extends StatelessWidget {
 | `enableDebug`            | `bool`                                             |          | Verbose console logging. Default `false`.                                                                        |
 
 
----
-
 ### NeshanLocationPickerConfig
 
 Controls how aggressively the widget calls the Neshan APIs.
@@ -427,8 +402,6 @@ NeshanLocationPickerConfig(
 | `geocodingDebounce` | `Duration` | 300 ms  | How long to wait after the map stops moving before calling the reverse-geocoding API. |
 | `searchDebounce`    | `Duration` | 300 ms  | How long to wait after the user stops typing before calling the search API.           |
 
-
----
 
 ### NeshanLocationPickerUiConfig — UI customization
 
@@ -503,13 +476,9 @@ Provided to `acceptButtonBuilder`:
 | `currentLocation` | `LatLng?`       | The currently selected coordinates.                                           |
 | `currentAddress`  | `String?`       | The currently resolved address string.                                        |
 
----
-
-## **Contributions**
+## Contributing
 
 Contributions are welcome! If you have suggestions for improvements, feature requests, or bug fixes, feel free to open an issue or submit a pull request on the [GitHub repository](https://github.com/hosseinzare1/neshan-maps-flutter).
-
----
 
 ## License
 
