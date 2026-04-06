@@ -25,7 +25,6 @@ A Flutter SDK for integrating [Neshan Maps](https://platform.neshan.org/) into y
 - [Location Permission Setup](#location-permission-setup)
 - [NeshanMap — Full Reference](#neshanmap--full-reference)
 - [NeshanLocationPicker — Full Reference](#neshanlocationpicker--full-reference)
-- [Imports](#imports)
 - [Contributing](#contributing)
 - [License](#license)
 
