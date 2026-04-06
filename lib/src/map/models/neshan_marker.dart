@@ -9,6 +9,10 @@ import 'package:latlong2/latlong.dart';
 /// ## Usage Example
 ///
 /// ```dart
+/// import 'package:flutter/material.dart';
+/// import 'package:latlong2/latlong.dart';
+/// import 'package:neshan_maps_flutter/map.dart';
+///
 /// final marker = NeshanMarker(
 ///   id: 'marker1',
 ///   position: LatLng(35.6892, 51.3890),

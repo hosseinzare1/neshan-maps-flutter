@@ -16,7 +16,8 @@ import 'widgets/search_body.dart';
 /// The widget uses ValueNotifier-based state management for efficient
 /// updates and clean separation of concerns.
 ///
-/// Example usage:
+/// Example usage (imports omitted; [SearchItem] is defined in this library’s
+/// search models):
 /// ```dart
 /// final result = await Navigator.push<SearchItem>(
 ///   context,

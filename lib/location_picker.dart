@@ -8,23 +8,24 @@
 /// - API error handling ([NeshanApiError])
 /// - Error callbacks on the map and picker widgets
 ///
-/// **Note**: This module depends on the map module. If you use this module,
-/// you do not need to separately import the map module as it is included.
+/// **Note:** This library re-exports [NeshanMapConfig] and [NeshanMapType] for
+/// configuring the picker’s map. For [NeshanMap], [NeshanMapController], and
+/// [NeshanMarker], import `package:neshan_maps_flutter/map.dart`.
 ///
 /// ## Usage
 ///
 /// ```dart
-/// // Import only the location picker module
 /// import 'package:neshan_maps_flutter/location_picker.dart';
+/// import 'package:latlong2/latlong.dart';
 ///
-/// // Use the location picker
 /// NeshanLocationPicker(
-///   mapKey: 'your-api-key',
+///   mapKey: 'your-map-api-key',
+///   reverseGeocodingApiKey: 'your-reverse-geocoding-key',
 ///   mapConfig: NeshanMapConfig(
 ///     initialCenter: LatLng(35.6892, 51.3890),
 ///   ),
-///   onLocationSelected: (location) {
-///     print('Selected: ${location.address}');
+///   onLocationAccepted: (position, address) {
+///     print('Selected: $address at ${position.latitude}, ${position.longitude}');
 ///   },
 /// );
 /// ```

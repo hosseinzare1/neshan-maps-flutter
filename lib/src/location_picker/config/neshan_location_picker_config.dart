@@ -8,16 +8,17 @@
 /// ```dart
 /// NeshanLocationPicker(
 ///   mapKey: 'your-map-api-key',
+///   reverseGeocodingApiKey: 'your-geocoding-key',
+///   searchApiKey: 'your-search-key', // Enables search
 ///   mapConfig: NeshanMapConfig(
 ///     initialCenter: LatLng(35.6892, 51.3890),
 ///     initialZoom: 15.0,
 ///   ),
-///   reverseGeocodingApiKey: 'your-geocoding-key', // Enables geocoding
-///   searchApiKey: 'your-search-key', // Enables search
-///   config: NeshanLocationPickerConfig(
+///   locationPickerConfig: NeshanLocationPickerConfig(
 ///     geocodingDebounce: Duration(milliseconds: 500),
 ///     searchDebounce: Duration(milliseconds: 400),
 ///   ),
+///   onLocationAccepted: (position, address) {},
 /// )
 /// ```
 ///

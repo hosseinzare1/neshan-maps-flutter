@@ -37,6 +37,9 @@ import 'platform/web/neshan_map_web_widget.dart'
 /// ## Basic Usage
 ///
 /// ```dart
+/// import 'package:neshan_maps_flutter/map.dart';
+/// import 'package:latlong2/latlong.dart';
+///
 /// NeshanMap(
 ///   mapKey: 'your-neshan-api-key',
 ///   config: NeshanMapConfig(
@@ -55,6 +58,10 @@ import 'platform/web/neshan_map_web_widget.dart'
 /// To add or remove markers after the map has loaded use [NeshanMapController]:
 ///
 /// ```dart
+/// import 'package:flutter/material.dart';
+/// import 'package:neshan_maps_flutter/map.dart';
+/// import 'package:latlong2/latlong.dart';
+///
 /// final controller = NeshanMapController();
 ///
 /// NeshanMap(

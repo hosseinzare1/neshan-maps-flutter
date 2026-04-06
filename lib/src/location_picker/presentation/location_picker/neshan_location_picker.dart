@@ -69,7 +69,7 @@ import 'widgets/picker_center_marker.dart';
 ///     initialCenter: LatLng(35.6892, 51.3890),
 ///     initialZoom: 15.0,
 ///   ),
-///   config: NeshanLocationPickerConfig(
+///   locationPickerConfig: NeshanLocationPickerConfig(
 ///     geocodingDebounce: Duration(milliseconds: 500),
 ///     searchDebounce: Duration(milliseconds: 400),
 ///   ),
@@ -218,9 +218,13 @@ class NeshanLocationPicker extends StatefulWidget {
   /// ## Example
   ///
   /// ```dart
+  /// import 'package:flutter/material.dart';
+  /// import 'package:neshan_maps_flutter/location_picker.dart';
+  ///
   /// NeshanLocationPicker(
   ///   mapKey: 'key',
   ///   reverseGeocodingApiKey: 'geocoding-key',
+  ///   onLocationAccepted: (position, address) {},
   ///   uiConfig: LocationPickerUiConfig(
   ///     acceptButtonBuilder: (context, data) => ElevatedButton(
   ///       onPressed: data.onPressed,

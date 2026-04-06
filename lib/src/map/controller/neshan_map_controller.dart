@@ -18,6 +18,8 @@ import '../../utils/neshan_map_logger.dart';
 /// ## Usage
 ///
 /// ```dart
+/// import 'package:neshan_maps_flutter/map.dart';
+///
 /// final controller = NeshanMapController();
 ///
 /// NeshanMap(
@@ -146,6 +148,10 @@ class NeshanMapController {
   ///
   /// Example:
   /// ```dart
+  /// import 'package:flutter/material.dart';
+  /// import 'package:neshan_maps_flutter/map.dart';
+  /// import 'package:latlong2/latlong.dart';
+  ///
   /// final marker = NeshanMarker(
   ///   id: 'marker1',
   ///   position: LatLng(35.6892, 51.3890),
@@ -174,6 +180,9 @@ class NeshanMapController {
   ///
   /// Example:
   /// ```dart
+  /// import 'package:neshan_maps_flutter/map.dart';
+  /// import 'package:latlong2/latlong.dart';
+  ///
   /// final markers = [
   ///   NeshanMarker(id: 'marker1', position: LatLng(35.6892, 51.3890)),
   ///   NeshanMarker(id: 'marker2', position: LatLng(35.7, 51.4)),

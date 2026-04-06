@@ -45,6 +45,9 @@ enum NeshanMapType {
 /// ## Usage Example
 ///
 /// ```dart
+/// import 'package:neshan_maps_flutter/map.dart';
+/// import 'package:latlong2/latlong.dart';
+///
 /// NeshanMap(
 ///   mapKey: 'your-api-key',
 ///   config: NeshanMapConfig(

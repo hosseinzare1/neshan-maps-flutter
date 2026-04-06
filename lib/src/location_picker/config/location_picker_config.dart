@@ -10,12 +10,17 @@
 // ## Example
 //
 // ```dart
-// import 'package:your_package/core/neshan_map/location_picker/config/location_picker_config.dart';
+// import 'package:neshan_maps_flutter/location_picker.dart';
+// import 'package:latlong2/latlong.dart';
 //
 // NeshanLocationPicker(
 //   mapKey: 'your-map-key',
 //   reverseGeocodingApiKey: 'geocoding-key',
-//   config: NeshanLocationPickerConfig(
+//   mapConfig: NeshanMapConfig(
+//     initialCenter: LatLng(35.6892, 51.3890),
+//   ),
+//   onLocationAccepted: (position, address) {},
+//   locationPickerConfig: NeshanLocationPickerConfig(
 //     geocodingDebounce: Duration(milliseconds: 500),
 //   ),
 //   uiConfig: LocationPickerUiConfig(

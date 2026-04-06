@@ -41,7 +41,7 @@ Register at **[platform.neshan.org](https://platform.neshan.org/)** and create t
 
 ### Important notes
 
-`**mapKey` must be a Web key.**
+**The `mapKey` must be a Web key.**
 This package renders the Neshan map using the Neshan Web SDK on all platforms (via a WebView on mobile and an `<iframe>` on web). When creating the key in the Neshan dashboard, select **Web** as the platform — an Android or iOS key will not work.
 
 **Do not restrict the allowed domain / IP.**
@@ -74,7 +74,7 @@ flutter pub get
 > **This step is optional.** It is only required if you want to show the user's current location on the map via `showCurrentLocationButton: true` in `NeshanMapConfig` (the default).  
 > If you set `showCurrentLocationButton: false`, you can skip this section entirely.
 
-This package uses the `[geolocator](https://pub.dev/packages/geolocator)` plugin internally to access device location. Follow the **platform-specific permission instructions** in the [geolocator documentation](https://pub.dev/packages/geolocator#usage) to add the required entries to your `AndroidManifest.xml`, `Info.plist`, and any other platform files.
+This package uses the [geolocator](https://pub.dev/packages/geolocator) plugin internally to access device location. Follow the **platform-specific permission instructions** in the [geolocator documentation](https://pub.dev/packages/geolocator#usage) to add the required entries to your `AndroidManifest.xml`, `Info.plist`, and any other platform files.
 
 ---
 
@@ -488,7 +488,7 @@ Provided to `addressDisplayBuilder`:
 | `isLoading`        | `bool`                      | `true` while a geocoding request is in flight.                               |
 | `hasError`         | `bool`                      | `true` if the last geocoding request failed.                                 |
 | `isSearchEnabled`  | `bool`                      | `true` when a `searchApiKey` has been supplied.                              |
-| `openSearchScreen` | `VoidCallback`              | Call this to open the search screen (only effective when search is enabled). |
+| `openSearchScreen` | `VoidCallback?`             | Call this to open the search screen; `null` when search is disabled.         |
 
 
 #### AcceptButtonData
@@ -502,23 +502,6 @@ Provided to `acceptButtonBuilder`:
 | `isEnabled`       | `bool`          | Whether the button should be active.                                          |
 | `currentLocation` | `LatLng?`       | The currently selected coordinates.                                           |
 | `currentAddress`  | `String?`       | The currently resolved address string.                                        |
-
-
----
-
-## Imports
-
-The package exposes two entry-point barrel files:
-
-```dart
-// For NeshanMap only
-import 'package:neshan_maps_flutter/map.dart';
-
-// For NeshanLocationPicker (also re-exports map types)
-import 'package:neshan_maps_flutter/location_picker.dart';
-```
-
-You do not need to import both — `location_picker.dart` already exports all map-related types (`NeshanMapConfig`, `NeshanMapType`, etc.).
 
 ---
 

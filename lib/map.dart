@@ -10,10 +10,9 @@
 /// ## Usage
 ///
 /// ```dart
-/// // Import only the map module
 /// import 'package:neshan_maps_flutter/map.dart';
+/// import 'package:latlong2/latlong.dart';
 ///
-/// // Use the map
 /// NeshanMap(
 ///   mapKey: 'your-api-key',
 ///   config: NeshanMapConfig(
