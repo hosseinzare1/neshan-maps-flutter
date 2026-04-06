@@ -8,7 +8,9 @@ import '../../utils/neshan_map_logger.dart';
 ///
 /// This is implemented differently for mobile (WebView) and web (iframe).
 abstract class NeshanMapControllerImpl {
-  Completer<void>? _readyCompleter;
+  // Eagerly created so markReady() always has a completer to complete,
+  // regardless of whether the caller has awaited `ready` yet.
+  final Completer<void> _readyCompleter = Completer<void>();
   Timer? _readyTimeout;
 
   /// Logger for debug output.
@@ -25,19 +27,17 @@ abstract class NeshanMapControllerImpl {
   /// is registered and ready. If the controller doesn't become ready within
   /// 10 seconds, the future will complete with a timeout error.
   Future<void> get ready {
-    if (_readyCompleter != null && !_readyCompleter!.isCompleted) {
-      return _readyCompleter!.future;
+    // Start the timeout only on first access, if not already completed.
+    if (!_readyCompleter.isCompleted && _readyTimeout == null) {
+      _readyTimeout = Timer(const Duration(seconds: 10), () {
+        if (!_readyCompleter.isCompleted) {
+          _readyCompleter.completeError(
+            TimeoutException('Controller did not become ready within 10 seconds'),
+          );
+        }
+      });
     }
-    _readyCompleter = Completer<void>();
-    _readyTimeout?.cancel();
-    _readyTimeout = Timer(const Duration(seconds: 10), () {
-      if (!_readyCompleter!.isCompleted) {
-        _readyCompleter!.completeError(
-          TimeoutException('Controller did not become ready within 10 seconds'),
-        );
-      }
-    });
-    return _readyCompleter!.future;
+    return _readyCompleter.future;
   }
 
   /// Marks the controller as ready.
@@ -47,8 +47,8 @@ abstract class NeshanMapControllerImpl {
   void markReady() {
     _readyTimeout?.cancel();
     _readyTimeout = null;
-    if (_readyCompleter != null && !_readyCompleter!.isCompleted) {
-      _readyCompleter!.complete();
+    if (!_readyCompleter.isCompleted) {
+      _readyCompleter.complete();
     }
   }
 
@@ -91,8 +91,8 @@ abstract class NeshanMapControllerImpl {
   void dispose() {
     _readyTimeout?.cancel();
     _readyTimeout = null;
-    if (_readyCompleter != null && !_readyCompleter!.isCompleted) {
-      _readyCompleter!.completeError(
+    if (!_readyCompleter.isCompleted) {
+      _readyCompleter.completeError(
         Exception('Controller disposed before becoming ready'),
       );
     }
