@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Fix `NeshanMapController.ready` never completing when the map became ready before `ready` was first accessed.
+
 ## 1.0.1
 
 Update the package README.md
