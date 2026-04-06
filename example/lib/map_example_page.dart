@@ -34,6 +34,7 @@ class _MapExamplePageState extends State<MapExamplePage> {
             icon: const Icon(Icons.location_city_outlined),
             tooltip: 'Move to Milad Tower area',
             onPressed: () async {
+             await _controller.ready;
               _controller.moveToLocation(
                 _milad.latitude,
                 _milad.longitude,
@@ -46,6 +47,7 @@ class _MapExamplePageState extends State<MapExamplePage> {
       body: NeshanMap(
         mapKey: kMapKey,
         controller: _controller,
+        enableDebug: true,
         config: const NeshanMapConfig(
           initialCenter: _tehran,
           initialZoom: 14,

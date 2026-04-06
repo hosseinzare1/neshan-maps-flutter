@@ -16,6 +16,7 @@ class LocationPickerExamplePage extends StatelessWidget {
         mapKey: kMapKey,
         reverseGeocodingApiKey: kReverseGeocodingApiKey,
         searchApiKey: kSearchApiKey,
+        enableDebug: true,
         mapConfig: const NeshanMapConfig(
           initialCenter: LatLng(35.6892, 51.3890),
           initialZoom: 15,
