@@ -123,6 +123,10 @@ As the user pans, the address bar at the top updates automatically. Tapping the 
 
 `NeshanMap` is a cross-platform widget that renders an interactive Neshan map. On mobile it uses a `WebView`; on web it uses an `<iframe>`.
 
+### Overlays on web
+
+On **web**, the map sits in an `HtmlElementView` behind your Flutter widgets. Overlays such as buttons, sheets, or the location FAB may not receive taps—the underlying map can consume pointer events first. Wrap interactive overlays with `PointerInterceptor` from [pointer_interceptor](https://pub.dev/packages/pointer_interceptor) — add that package to your app’s `pubspec.yaml` so you can import it. See the [package README](https://pub.dev/packages/pointer_interceptor) for usage, including the `intercepting` flag when interception is only needed sometimes.
+
 ### Complete example
 
 ```dart
