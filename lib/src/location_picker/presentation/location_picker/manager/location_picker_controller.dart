@@ -45,18 +45,18 @@ class LocationPickerController {
     bool enableDebug = false,
     Duration debounceDelay = const Duration(milliseconds: 500),
     void Function(String address, ReverseGeocodingResponse response)?
-        onAddressChanged,
+    onAddressChanged,
     void Function(NeshanApiError error)? onApiError,
     void Function(String message, Exception exception, StackTrace stackTrace)?
-        onError,
-  })  : _debounceDelay = debounceDelay,
-        _onAddressChanged = onAddressChanged,
-        _onApiError = onApiError,
-        _onError = onError,
-        _logger = NeshanMapLogger(
-          enabled: enableDebug,
-          prefix: 'LocationPickerController',
-        ) {
+    onError,
+  }) : _debounceDelay = debounceDelay,
+       _onAddressChanged = onAddressChanged,
+       _onApiError = onApiError,
+       _onError = onError,
+       _logger = NeshanMapLogger(
+         enabled: enableDebug,
+         prefix: 'LocationPickerController',
+       ) {
     if (reverseGeocodingApiKey != null) {
       _geocodingService = NeshanReverseGeocodingService(
         apiKey: reverseGeocodingApiKey,
@@ -77,10 +77,14 @@ class LocationPickerController {
   final NeshanMapLogger _logger;
   final Duration _debounceDelay;
   final void Function(String address, ReverseGeocodingResponse response)?
-      _onAddressChanged;
+  _onAddressChanged;
   final void Function(NeshanApiError error)? _onApiError;
-  final void Function(String message, Exception exception, StackTrace stackTrace)?
-      _onError;
+  final void Function(
+    String message,
+    Exception exception,
+    StackTrace stackTrace,
+  )?
+  _onError;
 
   Timer? _debounceTimer;
 
@@ -99,10 +103,7 @@ class LocationPickerController {
       _logger.log('First location received');
       state.value = state.value.locationReceived(lat, lng);
     } else {
-      state.value = state.value.copyWith(
-        currentLat: lat,
-        currentLng: lng,
-      );
+      state.value = state.value.copyWith(currentLat: lat, currentLng: lng);
     }
 
     // Trigger reverse geocoding if service is available
@@ -147,9 +148,7 @@ class LocationPickerController {
     try {
       final response = await _geocodingService!.reverseGeocode(lat, lng);
 
-      _logger.log(
-        'Address fetched successfully: ${response.formattedAddress}',
-      );
+      _logger.log('Address fetched successfully: ${response.formattedAddress}');
 
       // Update state with success
       state.value = state.value.geocodingSuccess(
@@ -239,4 +238,3 @@ class LocationPickerController {
     _logger.log('LocationPickerController disposed');
   }
 }
-

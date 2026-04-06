@@ -38,7 +38,9 @@ class _WebMapControllerImpl extends NeshanMapControllerImpl {
       return;
     }
 
-    logger.log('Moving to location: ($lat, $lng)${zoom != null ? ', zoom: $zoom' : ''}');
+    logger.log(
+      'Moving to location: ($lat, $lng)${zoom != null ? ', zoom: $zoom' : ''}',
+    );
     final message = {
       'type': 'updateLocation',
       'lat': lat,
@@ -88,7 +90,9 @@ class _WebMapControllerImpl extends NeshanMapControllerImpl {
                   final lat = (dataObj['lat'] as num).toDouble();
                   final lng = (dataObj['lng'] as num).toDouble();
                   final location = LatLng(lat, lng);
-                  logger.log('Got current location: (${location.latitude}, ${location.longitude})');
+                  logger.log(
+                    'Got current location: (${location.latitude}, ${location.longitude})',
+                  );
                   completer.complete(location);
                   if (listenerRef != null) {
                     web.window.removeEventListener('message', listenerRef);

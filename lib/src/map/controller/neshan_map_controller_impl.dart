@@ -45,7 +45,9 @@ class _MobileMapControllerImpl extends NeshanMapControllerImpl {
       return;
     }
 
-    logger.log('Moving to location: ($lat, $lng)${zoom != null ? ', zoom: $zoom' : ''}');
+    logger.log(
+      'Moving to location: ($lat, $lng)${zoom != null ? ', zoom: $zoom' : ''}',
+    );
     final zoomValue = zoom != null ? zoom.toString() : 'map.getZoom()';
     final script =
         '''
@@ -113,7 +115,9 @@ class _MobileMapControllerImpl extends NeshanMapControllerImpl {
           (jsonData['lat'] as num).toDouble(),
           (jsonData['lng'] as num).toDouble(),
         );
-        logger.log('Got current location: (${location.latitude}, ${location.longitude})');
+        logger.log(
+          'Got current location: (${location.latitude}, ${location.longitude})',
+        );
         return location;
       }
     } catch (e) {

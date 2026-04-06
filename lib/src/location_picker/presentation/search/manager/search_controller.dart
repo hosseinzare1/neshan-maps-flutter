@@ -40,12 +40,12 @@ class SearchController {
     bool enableDebug = false,
     Duration debounceDelay = const Duration(milliseconds: 300),
     void Function(NeshanApiError error)? onApiError,
-  })  : _onApiError = onApiError,
-        _debounceDelay = debounceDelay,
-        _logger = NeshanMapLogger(
-          enabled: enableDebug,
-          prefix: 'SearchController',
-        ) {
+  }) : _onApiError = onApiError,
+       _debounceDelay = debounceDelay,
+       _logger = NeshanMapLogger(
+         enabled: enableDebug,
+         prefix: 'SearchController',
+       ) {
     _searchService = NeshanSearchService(
       apiKey: apiKey,
       logger: _logger.withPrefix('Search'),

@@ -14,11 +14,7 @@ class PickerAcceptButton extends StatelessWidget {
   /// [data] - The accept button data containing enabled state and callbacks.
   /// [customBuilder] - Optional custom builder function from [LocationPickerUiConfig].
   /// If null, uses the default accept button implementation.
-  const PickerAcceptButton({
-    super.key,
-    required this.data,
-    this.customBuilder,
-  });
+  const PickerAcceptButton({super.key, required this.data, this.customBuilder});
 
   /// The accept button data.
   final AcceptButtonData data;
@@ -37,11 +33,11 @@ class PickerAcceptButton extends StatelessWidget {
         duration: const Duration(milliseconds: 300),
         // Wrap both custom and default widgets with PointerInterceptor
         child: PointerInterceptor(
-          child: customBuilder?.call(context, data) ??
+          child:
+              customBuilder?.call(context, data) ??
               DefaultAcceptButton(data: data),
         ),
       ),
     );
   }
 }
-

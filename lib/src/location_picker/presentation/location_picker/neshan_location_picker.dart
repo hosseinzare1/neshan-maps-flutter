@@ -268,7 +268,8 @@ class _NeshanLocationPickerState extends State<NeshanLocationPicker> {
     _logger.log('Initializing NeshanLocationPicker');
 
     // Get timing config or use defaults
-    final config = widget.locationPickerConfig ?? const NeshanLocationPickerConfig();
+    final config =
+        widget.locationPickerConfig ?? const NeshanLocationPickerConfig();
 
     // Initialize location picker controller
     _locationPickerController = LocationPickerController(
@@ -312,7 +313,8 @@ class _NeshanLocationPickerState extends State<NeshanLocationPicker> {
     }
 
     _logger.log('Opening search screen');
-    final config = widget.locationPickerConfig ?? const NeshanLocationPickerConfig();
+    final config =
+        widget.locationPickerConfig ?? const NeshanLocationPickerConfig();
 
     // Use current location from controller state or fallback to initial center
     final state = _locationPickerController.state.value;

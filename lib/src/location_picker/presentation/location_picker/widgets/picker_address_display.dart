@@ -33,17 +33,18 @@ class PickerAddressDisplay extends StatelessWidget {
       left: 16,
       right: 16,
       child: AnimatedOpacity(
-        opacity: (data.isLoading || data.formattedAddress != null || data.hasError)
+        opacity:
+            (data.isLoading || data.formattedAddress != null || data.hasError)
             ? 1.0
             : 0.0,
         duration: const Duration(milliseconds: 300),
         // Wrap both custom and default widgets with PointerInterceptor
         child: PointerInterceptor(
-          child: customBuilder?.call(context, data) ??
+          child:
+              customBuilder?.call(context, data) ??
               DefaultAddressDisplay(data: data),
         ),
       ),
     );
   }
 }
-

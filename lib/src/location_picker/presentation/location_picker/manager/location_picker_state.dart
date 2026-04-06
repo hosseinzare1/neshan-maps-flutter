@@ -1,4 +1,3 @@
-
 import '../../../data/reverse_geocoding/models/reverse_geocoding_response.dart';
 
 /// Immutable state class for location picker functionality.
@@ -41,13 +40,13 @@ class LocationPickerState {
 
   /// Creates an initial empty state.
   const LocationPickerState.initial()
-      : currentLat = null,
-        currentLng = null,
-        hasReceivedFirstLocation = false,
-        currentAddress = null,
-        lastReverseGeocodingResponse = null,
-        isLoadingAddress = false,
-        hasAddressError = false;
+    : currentLat = null,
+      currentLng = null,
+      hasReceivedFirstLocation = false,
+      currentAddress = null,
+      lastReverseGeocodingResponse = null,
+      isLoadingAddress = false,
+      hasAddressError = false;
 
   /// Creates a state for when location is received but geocoding not started.
   LocationPickerState locationReceived(double lat, double lng) {
@@ -134,4 +133,3 @@ class LocationPickerState {
   bool get isReadyToAccept =>
       hasLocation && currentAddress != null && !isLoadingAddress;
 }
-

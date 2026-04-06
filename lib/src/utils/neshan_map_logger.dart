@@ -27,10 +27,7 @@ class NeshanMapLogger {
   ///
   /// [enabled] controls whether logs are printed. Defaults to false.
   /// [prefix] is prepended to all log messages for identification.
-  const NeshanMapLogger({
-    this.enabled = false,
-    this.prefix = '',
-  });
+  const NeshanMapLogger({this.enabled = false, this.prefix = ''});
 
   /// Logs an informational message.
   ///
@@ -66,4 +63,3 @@ class NeshanMapLogger {
   /// Useful as a default value.
   static const NeshanMapLogger disabled = NeshanMapLogger(enabled: false);
 }
-
