@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../widgets/map_pointer_interceptor/map_pointer_interceptor.dart';
 import '../../../config/location_picker_builders.dart';
-import '../../../config/location_picker_ui_config.dart';
+import '../../../config/neshan_location_picker_ui_config.dart';
 import 'default_widgets.dart';
 
 /// Widget that displays the address information above the map.
@@ -12,7 +12,7 @@ class PickerAddressDisplay extends StatelessWidget {
   /// Creates a [PickerAddressDisplay] widget.
   ///
   /// [data] - The address display data containing address, loading, and error states.
-  /// [customBuilder] - Optional custom builder function from [LocationPickerUiConfig].
+  /// [customBuilder] - Optional custom builder function from [NeshanLocationPickerUiConfig].
   /// If null, uses the default address display implementation.
   const PickerAddressDisplay({
     super.key,

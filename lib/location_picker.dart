@@ -34,6 +34,7 @@ library;
 // Location picker exports
 export 'src/location_picker/presentation/location_picker/neshan_location_picker.dart';
 export 'src/location_picker/config/neshan_location_picker_config.dart';
+export 'src/location_picker/config/location_picker_config.dart';
 export 'src/location_picker/data/reverse_geocoding/models/reverse_geocoding_response.dart';
 export 'src/location_picker/data/error/neshan_api_error.dart';
 

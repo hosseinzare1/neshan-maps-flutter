@@ -9,7 +9,7 @@ import '../../../utils/neshan_map_logger.dart';
 import '../../../utils/neshan_common.dart';
 import '../../config/neshan_location_picker_config.dart';
 import '../../config/location_picker_builders.dart';
-import '../../config/location_picker_ui_config.dart';
+import '../../config/neshan_location_picker_ui_config.dart';
 import '../../data/error/neshan_api_error.dart';
 import '../../data/reverse_geocoding/models/reverse_geocoding_response.dart';
 import '../../data/search/models/search_models.dart';
@@ -100,7 +100,7 @@ class NeshanLocationPicker extends StatefulWidget {
   /// - [locationPickerConfig] — Debounce durations for geocoding & search.
   ///
   /// **UI:**
-  /// - [uiConfig] — Custom builders for address display, accept button, and
+  /// - [locationPickerUiConfig] — Custom builders for address display, accept button, and
   ///   centre marker.
   ///
   /// **Callbacks:**
@@ -121,7 +121,7 @@ class NeshanLocationPicker extends StatefulWidget {
     this.controller,
     this.searchApiKey,
     this.locationPickerConfig,
-    this.uiConfig,
+    this.locationPickerUiConfig,
     this.onLocationChanged,
     this.onAddressChanged,
     this.onApiError,
@@ -225,7 +225,7 @@ class NeshanLocationPicker extends StatefulWidget {
   ///   mapKey: 'key',
   ///   reverseGeocodingApiKey: 'geocoding-key',
   ///   onLocationAccepted: (position, address) {},
-  ///   uiConfig: LocationPickerUiConfig(
+  ///   locationPickerUiConfig: NeshanLocationPickerUiConfig(
   ///     acceptButtonBuilder: (context, data) => ElevatedButton(
   ///       onPressed: data.onPressed,
   ///       child: const Text('Confirm'),
@@ -235,7 +235,7 @@ class NeshanLocationPicker extends StatefulWidget {
   ///   ),
   /// )
   /// ```
-  final LocationPickerUiConfig? uiConfig;
+  final NeshanLocationPickerUiConfig? locationPickerUiConfig;
 
   /// Enables verbose debug logging to the console.
   ///
@@ -396,7 +396,7 @@ class _NeshanLocationPickerState extends State<NeshanLocationPicker> {
             // Show only after first location update (when map is ready)
             if (state.hasReceivedFirstLocation)
               PickerCenterMarker(
-                customBuilder: widget.uiConfig?.centerMarkerBuilder,
+                customBuilder: widget.locationPickerUiConfig?.centerMarkerBuilder,
               ),
 
             // Address display overlay (positioned above map)
@@ -409,7 +409,7 @@ class _NeshanLocationPickerState extends State<NeshanLocationPicker> {
                 openSearchScreen: _openSearchScreen,
                 isSearchEnabled: _isSearchEnabled,
               ),
-              customBuilder: widget.uiConfig?.addressDisplayBuilder,
+              customBuilder: widget.locationPickerUiConfig?.addressDisplayBuilder,
             ),
 
             // Accept button overlay (positioned above map)
@@ -429,7 +429,7 @@ class _NeshanLocationPickerState extends State<NeshanLocationPicker> {
                     : null,
                 currentAddress: state.currentAddress,
               ),
-              customBuilder: widget.uiConfig?.acceptButtonBuilder,
+              customBuilder: widget.locationPickerUiConfig?.acceptButtonBuilder,
             ),
           ],
         );

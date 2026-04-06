@@ -7,13 +7,13 @@ import 'location_picker_builders.dart';
 /// - Accept button (bottom of map)
 /// - Center marker (indicates selected location)
 ///
-/// Pass this to [NeshanLocationPicker.uiConfig] parameter.
+/// Pass this to [NeshanLocationPicker.locationPickerUiConfig] parameter.
 /// All builders are optional - if null, default implementations will be used.
 ///
 /// ## Example - Custom Address Display
 ///
 /// ```dart
-/// LocationPickerUiConfig(
+/// NeshanLocationPickerUiConfig(
 ///   addressDisplayBuilder: (context, data) {
 ///     return Container(
 ///       padding: EdgeInsets.all(16),
@@ -40,7 +40,7 @@ import 'location_picker_builders.dart';
 /// ## Example - Custom Accept Button
 ///
 /// ```dart
-/// LocationPickerUiConfig(
+/// NeshanLocationPickerUiConfig(
 ///   acceptButtonBuilder: (context, data) {
 ///     return ElevatedButton.icon(
 ///       onPressed: data.onPressed,
@@ -57,7 +57,7 @@ import 'location_picker_builders.dart';
 /// ## Example - Custom Marker
 ///
 /// ```dart
-/// LocationPickerUiConfig(
+/// NeshanLocationPickerUiConfig(
 ///   centerMarkerBuilder: (context) {
 ///     return Icon(
 ///       Icons.location_pin,
@@ -67,9 +67,9 @@ import 'location_picker_builders.dart';
 ///   },
 /// )
 /// ```
-class LocationPickerUiConfig {
+class NeshanLocationPickerUiConfig {
   /// Creates a UI configuration for location picker.
-  const LocationPickerUiConfig({
+  const NeshanLocationPickerUiConfig({
     this.addressDisplayBuilder,
     this.acceptButtonBuilder,
     this.centerMarkerBuilder,

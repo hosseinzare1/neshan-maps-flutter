@@ -4,7 +4,7 @@
 //
 // Import this single file to access:
 // - NeshanLocationPickerConfig - Timing configuration (debounce durations)
-// - LocationPickerUiConfig - UI customization (builders)
+// - NeshanLocationPickerUiConfig - UI customization (builders)
 // - All builder typedefs and data classes
 //
 // ## Example
@@ -23,11 +23,11 @@
 //   locationPickerConfig: NeshanLocationPickerConfig(
 //     geocodingDebounce: Duration(milliseconds: 500),
 //   ),
-//   uiConfig: LocationPickerUiConfig(
+//   locationPickerUiConfig: NeshanLocationPickerUiConfig(
 //     addressDisplayBuilder: (context, data) => CustomWidget(),
 //   ),
 // )
 // ```
 export 'neshan_location_picker_config.dart';
-export 'location_picker_ui_config.dart';
+export 'neshan_location_picker_ui_config.dart';
 export 'location_picker_builders.dart';

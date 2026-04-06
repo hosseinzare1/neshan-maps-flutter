@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../widgets/map_pointer_interceptor/map_pointer_interceptor.dart';
 import '../../../config/location_picker_builders.dart';
-import '../../../config/location_picker_ui_config.dart';
+import '../../../config/neshan_location_picker_ui_config.dart';
 import 'default_widgets.dart';
 
 /// Widget that displays the accept location button below the map.
@@ -12,7 +12,7 @@ class PickerAcceptButton extends StatelessWidget {
   /// Creates a [PickerAcceptButton] widget.
   ///
   /// [data] - The accept button data containing enabled state and callbacks.
-  /// [customBuilder] - Optional custom builder function from [LocationPickerUiConfig].
+  /// [customBuilder] - Optional custom builder function from [NeshanLocationPickerUiConfig].
   /// If null, uses the default accept button implementation.
   const PickerAcceptButton({super.key, required this.data, this.customBuilder});
 

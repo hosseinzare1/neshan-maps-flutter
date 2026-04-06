@@ -400,7 +400,7 @@ class PickerPage extends StatelessWidget {
 | `controller`             | `NeshanMapController?`                             |          | External controller for programmatic map control. An internal one is created automatically if omitted.           |
 | `searchApiKey`           | `String?`                                          |          | Neshan search API key. **When provided**, a search icon appears in the address bar. Omitting it disables search. |
 | `locationPickerConfig`   | `NeshanLocationPickerConfig?`                      |          | Debounce durations for geocoding and search.                                                                     |
-| `uiConfig`               | `LocationPickerUiConfig?`                          |          | Custom builders for the address bar, confirm button, and centre marker.                                          |
+| `locationPickerUiConfig` | `NeshanLocationPickerUiConfig?`                    |          | Custom builders for the address bar, confirm button, and centre marker.                                          |
 | `onLocationChanged`      | `void Function(double lat, double lng)?`           |          | Fired when the map centre changes.                                                                               |
 | `onAddressChanged`       | `void Function(String, ReverseGeocodingResponse)?` |          | Fired when reverse-geocoding returns a new address.                                                              |
 | `onApiError`             | `void Function(NeshanApiError)?`                   |          | Fired when a geocoding or search API request fails.                                                              |
@@ -430,7 +430,7 @@ NeshanLocationPickerConfig(
 
 ---
 
-### LocationPickerUiConfig — UI customization
+### NeshanLocationPickerUiConfig — UI customization
 
 Override any of the three overlay widgets with your own builders. Omitting a builder falls back to the default implementation.
 
@@ -439,7 +439,7 @@ NeshanLocationPicker(
   mapKey: 'YOUR_MAP_KEY',
   reverseGeocodingApiKey: 'YOUR_REVERSE_GEOCODING_KEY',
   onLocationAccepted: (position, address) { /* ... */ },
-  uiConfig: LocationPickerUiConfig(
+  locationPickerUiConfig: NeshanLocationPickerUiConfig(
     // Custom address bar
     addressDisplayBuilder: (context, data) {
       return Container(

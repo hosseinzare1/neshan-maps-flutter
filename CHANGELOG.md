@@ -8,4 +8,4 @@ Initial release.
 - `NeshanMapConfig`: viewport and style configuration (initial centre, zoom, map type, traffic, POI, location button).
 - `NeshanLocationPicker` widget: location selection with a draggable centre-pin, automatic reverse-geocoding address bar, and optional place search.
 - `NeshanLocationPickerConfig`: debounce tuning for geocoding and search API calls.
-- `LocationPickerUiConfig`: custom builders for the address bar, confirm button, and centre marker.
+- `NeshanLocationPickerUiConfig`: custom builders for the address bar, confirm button, and centre marker.

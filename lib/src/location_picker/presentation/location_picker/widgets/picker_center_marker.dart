@@ -10,7 +10,7 @@ import 'default_widgets.dart';
 class PickerCenterMarker extends StatelessWidget {
   /// Creates a [PickerCenterMarker] widget.
   ///
-  /// [customBuilder] - Optional custom builder function from [LocationPickerUiConfig].
+  /// [customBuilder] - Optional custom builder function from [NeshanLocationPickerUiConfig].
   /// If null, uses the default center marker implementation.
   const PickerCenterMarker({super.key, this.customBuilder});
 

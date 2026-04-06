@@ -106,7 +106,7 @@ class SkeletonLoader extends StatelessWidget {
 
 /// Default address display widget implementation.
 ///
-/// Used when [LocationPickerUiConfig.addressDisplayBuilder] is null.
+/// Used when [NeshanLocationPickerUiConfig.addressDisplayBuilder] is null.
 ///
 /// This widget is public so users can:
 /// - Use it as reference implementation
@@ -259,7 +259,7 @@ class DefaultAddressDisplay extends StatelessWidget {
 
 /// Default accept button widget implementation.
 ///
-/// Used when [LocationPickerUiConfig.acceptButtonBuilder] is null.
+/// Used when [NeshanLocationPickerUiConfig.acceptButtonBuilder] is null.
 ///
 /// This widget is public so users can:
 /// - Use it as reference implementation
