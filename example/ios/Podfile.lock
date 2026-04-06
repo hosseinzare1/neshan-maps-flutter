@@ -3,6 +3,8 @@ PODS:
   - geolocator_apple (1.2.0):
     - Flutter
     - FlutterMacOS
+  - package_info_plus (0.4.5):
+    - Flutter
   - pointer_interceptor_ios (0.0.1):
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
@@ -12,6 +14,7 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/darwin`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - pointer_interceptor_ios (from `.symlinks/plugins/pointer_interceptor_ios/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
@@ -20,6 +23,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   geolocator_apple:
     :path: ".symlinks/plugins/geolocator_apple/darwin"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   pointer_interceptor_ios:
     :path: ".symlinks/plugins/pointer_interceptor_ios/ios"
   webview_flutter_wkwebview:
@@ -28,6 +33,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   geolocator_apple: 66b711889fd333205763b83c9dcf0a57a28c7afd
+  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
   pointer_interceptor_ios: a78ffe95ad3c6cd52c42ad362c116d92355c3d42
   webview_flutter_wkwebview: 29eb20d43355b48fe7d07113835b9128f84e3af4
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
+import '../../widgets/map_pointer_interceptor/map_pointer_interceptor.dart';
 
 /// A floating action button that triggers current location tracking.
 ///
@@ -51,7 +51,7 @@ class CurrentLocationButton extends StatelessWidget {
     return Positioned(
       bottom: 86,
       right: 16,
-      child: PointerInterceptor(
+      child: MapPointerInterceptor(
         child: FloatingActionButton(
           mini: true,
           backgroundColor: Colors.white,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
+import '../../../../widgets/map_pointer_interceptor/map_pointer_interceptor.dart';
 import '../../../config/location_picker_builders.dart';
 import '../../../config/location_picker_ui_config.dart';
 import 'default_widgets.dart';
@@ -39,7 +39,7 @@ class PickerAddressDisplay extends StatelessWidget {
             : 0.0,
         duration: const Duration(milliseconds: 300),
         // Wrap both custom and default widgets with PointerInterceptor
-        child: PointerInterceptor(
+        child: MapPointerInterceptor(
           child:
               customBuilder?.call(context, data) ??
               DefaultAddressDisplay(data: data),
