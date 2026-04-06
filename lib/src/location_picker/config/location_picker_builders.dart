@@ -9,6 +9,9 @@ import '../data/reverse_geocoding/models/reverse_geocoding_response.dart';
 /// Contains all information needed to display the current address
 /// and handle user interactions.
 class AddressDisplayData {
+  /// Creates address-display data passed to [AddressDisplayBuilder].
+  ///
+  /// All fields are required so custom builders can render a complete UI state.
   const AddressDisplayData({
     required this.formattedAddress,
     required this.fullResponse,
@@ -53,6 +56,9 @@ typedef AddressDisplayBuilder =
 ///
 /// Contains information about the selected location and button state.
 class AcceptButtonData {
+  /// Creates accept-button data passed to [AcceptButtonBuilder].
+  ///
+  /// All fields are required so builders can decide enabled state and behavior.
   const AcceptButtonData({
     required this.onPressed,
     required this.isEnabled,

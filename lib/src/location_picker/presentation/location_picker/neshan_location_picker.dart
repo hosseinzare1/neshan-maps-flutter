@@ -396,7 +396,8 @@ class _NeshanLocationPickerState extends State<NeshanLocationPicker> {
             // Show only after first location update (when map is ready)
             if (state.hasReceivedFirstLocation)
               PickerCenterMarker(
-                customBuilder: widget.locationPickerUiConfig?.centerMarkerBuilder,
+                customBuilder:
+                    widget.locationPickerUiConfig?.centerMarkerBuilder,
               ),
 
             // Address display overlay (positioned above map)
@@ -409,7 +410,8 @@ class _NeshanLocationPickerState extends State<NeshanLocationPicker> {
                 openSearchScreen: _openSearchScreen,
                 isSearchEnabled: _isSearchEnabled,
               ),
-              customBuilder: widget.locationPickerUiConfig?.addressDisplayBuilder,
+              customBuilder:
+                  widget.locationPickerUiConfig?.addressDisplayBuilder,
             ),
 
             // Accept button overlay (positioned above map)
