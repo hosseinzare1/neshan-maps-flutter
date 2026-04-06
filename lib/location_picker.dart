@@ -30,11 +30,11 @@
 // ```
 
 // Location picker exports
-export 'location_picker/presentation/location_picker/neshan_location_picker.dart';
-export 'location_picker/config/neshan_location_picker_config.dart';
-export 'location_picker/data/reverse_geocoding/models/reverse_geocoding_response.dart';
-export 'location_picker/data/error/neshan_api_error.dart';
+export 'src/location_picker/presentation/location_picker/neshan_location_picker.dart';
+export 'src/location_picker/config/neshan_location_picker_config.dart';
+export 'src/location_picker/data/reverse_geocoding/models/reverse_geocoding_response.dart';
+export 'src/location_picker/data/error/neshan_api_error.dart';
 
 
 // Map exports (needed for NeshanMapConfig used in location picker)
-export 'map/config/neshan_map_config.dart';
+export 'src/map/config/neshan_map_config.dart';
