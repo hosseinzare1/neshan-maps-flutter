@@ -10,8 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  neshan_maps_flutter:
-    path: ../
+
+  neshan_maps_flutter: 1.0.0
   latlong2: ^0.9.1
   cupertino_icons: ^1.0.8
 
