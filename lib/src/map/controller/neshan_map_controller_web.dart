@@ -45,7 +45,7 @@ class _WebMapControllerImpl extends NeshanMapControllerImpl {
       'type': 'updateLocation',
       'lat': lat,
       'lng': lng,
-      if (zoom != null) 'zoom': zoom,
+      'zoom': ?zoom,
     };
 
     _iframe!.contentWindow!.postMessage(message.jsify(), '*'.toJS);

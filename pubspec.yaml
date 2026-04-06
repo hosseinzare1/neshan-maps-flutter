@@ -1,12 +1,24 @@
 name: neshan_maps_flutter
 description: "A Flutter SDK for Neshan Maps. Provides an interactive map widget and a ready-to-use location picker with reverse-geocoding and search."
 version: 1.0.0
-homepage: https://hosseinzi.com
+homepage: https://github.com/hosseinzare1/neshan-maps-flutter
 repository: https://github.com/hosseinzare1/neshan-maps-flutter
 issue_tracker: https://github.com/hosseinzare1/neshan-maps-flutter/issues
+topics:
+  - map
+  - geocoding
+  - neshan
+
+screenshots:
+  - description: "NeshanMap widget with pan, zoom, markers, and map controls."
+    path: screenshots/map.png
+  - description: "NeshanLocationPicker with centre pin, address bar, and confirm action."
+    path: screenshots/picker.png
+  - description: "Full-screen place search with results list."
+    path: screenshots/search.png
 
 environment:
-  sdk: ^3.11.0
+  sdk: ^3.10.1
   flutter: ">=1.17.0"
 
 dependencies:
